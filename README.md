@@ -8,5 +8,6 @@ The app will be a player. Features:
   * Swipe to remove (Swipeable row from gesture handler)
   * Tap to play (Show player similar to RN Paper Banner https://callstack.github.io/react-native-paper/banner.html)
 * On dummy player buttons play, pause and stop with animated bar (no songs, bar only) 
+* Dark and light theme
 * Internalized strings
 * Accessible components 
