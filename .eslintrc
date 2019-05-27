@@ -1,3 +1,6 @@
 {
-  "extends": ["@callstack"]
+  "extends": ["@callstack"],
+  "rules": {
+    "react-native/no-color-literals": "off"
+  }
 }
