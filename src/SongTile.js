@@ -1,16 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import FavouriteIcon from './FavouriteIcon';
+
 const SongTile = props => (
-  <View style={style.song}>
+  <View style={styles.song}>
+    <FavouriteIcon />
     <Text>{props.item.name}</Text>
   </View>
 );
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   song: {
     backgroundColor: '#FFF',
-    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,
     height: 60,
