@@ -1,0 +1,5 @@
+node_modules/
+flow-typed/
+coverage/
+docs/dist/
+babel.config.js
