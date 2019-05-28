@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import runTiming from './utils';
+import { runTiming } from './utils';
 import iconHeart from '../assets/icon_heart.png';
 
 const { Clock, Value, color, round } = Animated;
@@ -42,8 +42,8 @@ class FavIcon extends React.Component {
 
 const style = StyleSheet.create({
   icon: {
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
     marginRight: 10,
   },
 });
