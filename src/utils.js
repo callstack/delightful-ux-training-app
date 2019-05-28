@@ -26,7 +26,6 @@ export const runTiming = (clock, value, dest) => {
   };
 
   return block([
-    // empty array as first arg since cond doesn't process nots
     cond(
       clockRunning(clock),
       [],
