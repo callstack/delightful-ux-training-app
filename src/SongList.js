@@ -1,47 +1,22 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import CollapsibleHeader from './CollapsibleHeader';
 import SongTile from './SongTile';
 import songs from '../assets/topTracks.json';
+import { NAV_BAR_HEIGHT } from './constants';
 
-const { interpolate, Extrapolate } = Animated;
+const { Value, event } = Animated;
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class SongsList extends React.Component {
   state = {
     data: songs.tracks,
   };
 
-  scrollY = new Animated.Value(0);
-
-  headerImageOffset = interpolate(this.scrollY, {
-    inputRange: [0, 100],
-    outputRange: [50, -70],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
-  headerHeight = interpolate(this.scrollY, {
-    inputRange: [0, 100],
-    outputRange: [180, 51],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
-  fontSize = interpolate(this.scrollY, {
-    inputRange: [0, 100],
-    outputRange: [20, 16],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
-  processScroll = Animated.event([
-    {
-      nativeEvent: {
-        contentOffset: {
-          y: this.scrollY,
-        },
-      },
-    },
-  ]);
+  scrollY = new Value(0);
 
   onSongRemove = id => {
     const index = this.state.data.findIndex(item => item.track.id === id);
@@ -54,29 +29,40 @@ class SongsList extends React.Component {
   };
 
   render() {
-    const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
     return (
-      <Animated.View>
+      <View>
         <AnimatedFlatList
           data={this.state.data}
           renderItem={item => (
             <SongTile item={item.item} onSongRemove={this.onSongRemove} />
           )}
           keyExtractor={item => item.track.id}
-          ListHeaderComponent={
-            <CollapsibleHeader
-              imageOffset={this.headerImageOffset}
-              height={this.headerHeight}
-              fontSize={this.fontSize}
-            />
-          }
-          stickyHeaderIndices={[0]}
-          onScroll={this.processScroll}
+          bounces={false}
+          onScroll={event(
+            [
+              {
+                nativeEvent: {
+                  contentOffset: {
+                    y: this.scrollY,
+                  },
+                },
+              },
+            ],
+            { useNativeDriver: true }
+          )}
           scrollEventThrottle={16}
+          contentContainerStyle={styles.listContainer}
         />
-      </Animated.View>
+        <CollapsibleHeader scrollY={this.scrollY} />
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  listContainer: {
+    paddingTop: NAV_BAR_HEIGHT,
+  },
+});
 
 export default SongsList;
