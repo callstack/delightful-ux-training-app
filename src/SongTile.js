@@ -1,14 +1,13 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import Animated, { Easing } from 'react-native-reanimated';
 
 import FavouriteIcon from './FavouriteIcon';
 import SmallSongImage from './SmallSongImage';
+import { ROW_HEIGHT } from './constants';
 
 const { Value, interpolate, Extrapolate, Clock, timing } = Animated;
-
-const ROW_HEIGHT = 70;
 
 class SongTile extends React.Component {
   swipeX = new Value(0);
@@ -51,36 +50,43 @@ class SongTile extends React.Component {
   };
 
   render() {
+    const {
+      item: { track },
+      onPress,
+    } = this.props;
+
     return (
-      <Animated.View style={{ opacity: this.opacity, height: this.height }}>
-        <PanGestureHandler
-          onGestureEvent={this.processSwipe}
-          onHandlerStateChange={this.removeTile}
-          minOffsetX={10}
-        >
-          <Animated.View
-            style={[
-              styles.song,
-              {
-                transform: [{ translateX: this.offsetX }],
-              },
-            ]}
+      <TouchableOpacity onPress={onPress}>
+        <Animated.View style={{ opacity: this.opacity, height: this.height }}>
+          <PanGestureHandler
+            onGestureEvent={this.processSwipe}
+            onHandlerStateChange={this.removeTile}
+            minOffsetX={10}
           >
-            <View style={styles.innerContainer}>
-              <SmallSongImage uri={this.props.item.track.album.images[0].url} />
-              <View>
-                <Text style={styles.text} numberOfLines={1}>
-                  {this.props.item.track.name}
-                </Text>
-                <Text style={styles.text} numberOfLines={1}>
-                  {this.props.item.track.album.name}
-                </Text>
+            <Animated.View
+              style={[
+                styles.song,
+                {
+                  transform: [{ translateX: this.offsetX }],
+                },
+              ]}
+            >
+              <View style={styles.innerContainer}>
+                <SmallSongImage uri={track.album.images[0].url} />
+                <View>
+                  <Text style={styles.text} numberOfLines={1}>
+                    {track.name}
+                  </Text>
+                  <Text style={styles.text} numberOfLines={1}>
+                    {track.album.name}
+                  </Text>
+                </View>
               </View>
-            </View>
-            <FavouriteIcon />
-          </Animated.View>
-        </PanGestureHandler>
-      </Animated.View>
+              <FavouriteIcon />
+            </Animated.View>
+          </PanGestureHandler>
+        </Animated.View>
+      </TouchableOpacity>
     );
   }
 }

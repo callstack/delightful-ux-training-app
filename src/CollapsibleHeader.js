@@ -3,38 +3,50 @@ import { StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { NAV_BAR_HEIGHT } from './constants';
 
-import info from '../assets/artistInfo.json';
-
-const { interpolate, Extrapolate, multiply } = Animated;
+const { interpolate, Extrapolate, multiply, add } = Animated;
 
 class CollapsibleHeader extends React.Component {
   translateY = interpolate(this.props.scrollY, {
-    inputRange: [0, 80],
-    outputRange: [0, -80],
+    inputRange: [0, 100],
+    outputRange: [0, -100],
     extrapolate: Extrapolate.CLAMP,
   });
 
   fontSize = interpolate(this.props.scrollY, {
-    inputRange: [0, 80],
-    outputRange: [24, 16],
+    inputRange: [0, 25],
+    outputRange: [24, 20],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  titleOpacity = interpolate(this.props.scrollY, {
+    inputRange: [0, 25],
+    outputRange: [1, 0],
     extrapolate: Extrapolate.CLAMP,
   });
 
   contentTranslateY = multiply(this.translateY, -1);
 
   imageScale = interpolate(this.props.scrollY, {
-    inputRange: [0, 80],
+    inputRange: [0, 100],
     outputRange: [1, 0.6],
     extrapolate: Extrapolate.CLAMP,
   });
 
   imageTranslateY = interpolate(this.props.scrollY, {
-    inputRange: [0, 80],
-    outputRange: [0, -40],
+    inputRange: [0, 100],
+    outputRange: [0, -70],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  borderRadius = interpolate(this.props.scrollY, {
+    inputRange: [0, 100],
+    outputRange: [10, 60],
     extrapolate: Extrapolate.CLAMP,
   });
 
   render() {
+    const { currentSong } = this.props;
+
     return (
       <Animated.View
         style={[
@@ -53,6 +65,7 @@ class CollapsibleHeader extends React.Component {
             styles.artistName,
             {
               fontSize: this.fontSize,
+              opacity: this.titleOpacity,
               transform: [
                 {
                   translateY: this.contentTranslateY,
@@ -61,15 +74,17 @@ class CollapsibleHeader extends React.Component {
             },
           ]}
         >
-          {info.artist.name}
+          {currentSong.track.artists[0].name}
         </Animated.Text>
         <Animated.View
           style={[
             styles.imageContainer,
             {
+              borderRadius: this.borderRadius,
               transform: [
                 {
-                  translateY: this.imageTranslateY,
+                  translateY: add(this.imageTranslateY, this.contentTranslateY),
+                  scale: this.imageScale,
                 },
               ],
             },
@@ -77,20 +92,9 @@ class CollapsibleHeader extends React.Component {
         >
           <Animated.Image
             source={{
-              uri:
-                'https://i.scdn.co/image/b92d960031392953214e14700f5af195a910751c',
+              uri: currentSong.track.album.images[0].url,
             }}
-            style={[
-              styles.image,
-              {
-                transform: [
-                  {
-                    translateY: this.contentTranslateY,
-                    scale: this.imageScale,
-                  },
-                ],
-              },
-            ]}
+            style={styles.image}
           />
         </Animated.View>
       </Animated.View>
@@ -116,14 +120,14 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
     position: 'absolute',
     top: 50,
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#5c7ea8',
   },
   image: {
     width: 120,
     height: 120,
-    borderRadius: 10,
   },
 });

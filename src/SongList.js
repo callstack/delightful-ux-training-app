@@ -14,6 +14,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 class SongsList extends React.Component {
   state = {
     data: songs.tracks,
+    currentSong: songs.tracks[0],
   };
 
   scrollY = new Value(0);
@@ -28,32 +29,39 @@ class SongsList extends React.Component {
     }
   };
 
+  onSongSelect = song => {
+    this.setState({ currentSong: song });
+  };
+
   render() {
+    const { data, currentSong } = this.state;
+
     return (
       <View>
         <AnimatedFlatList
-          data={this.state.data}
+          data={data}
           renderItem={item => (
-            <SongTile item={item.item} onSongRemove={this.onSongRemove} />
+            <SongTile
+              item={item.item}
+              onSongRemove={this.onSongRemove}
+              onPress={() => this.onSongSelect(item.item)}
+            />
           )}
           keyExtractor={item => item.track.id}
           bounces={false}
-          onScroll={event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: {
-                    y: this.scrollY,
-                  },
+          onScroll={event([
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: this.scrollY,
                 },
               },
-            ],
-            { useNativeDriver: true }
-          )}
+            },
+          ])}
           scrollEventThrottle={16}
           contentContainerStyle={styles.listContainer}
         />
-        <CollapsibleHeader scrollY={this.scrollY} />
+        <CollapsibleHeader scrollY={this.scrollY} currentSong={currentSong} />
       </View>
     );
   }
