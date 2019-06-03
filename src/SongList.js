@@ -35,7 +35,6 @@ class SongsList extends React.Component {
 
   render() {
     const { data, currentSong } = this.state;
-
     return (
       <View>
         <AnimatedFlatList
@@ -44,7 +43,10 @@ class SongsList extends React.Component {
             <SongTile
               item={item.item}
               onSongRemove={this.onSongRemove}
-              onPress={() => this.onSongSelect(item.item)}
+              onPress={() => {
+                this.props.setSong(item.item.track.album.name);
+                this.onSongSelect(item.item);
+              }}
             />
           )}
           keyExtractor={item => item.track.id}
