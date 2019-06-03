@@ -11,12 +11,10 @@ export default class App extends React.Component {
   };
 
   setSong = title => {
-    console.log('tapp');
     this.setState({ currentSong: title });
   };
 
   render() {
-    console.log('render');
     return (
       <SafeAreaView style={styles.container}>
         <Player

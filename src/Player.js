@@ -52,7 +52,6 @@ class Player extends React.PureComponent {
     const backgroundColor = '#21262c',
       primaryColor = '#FFF',
       contrastColor = '#F8F32B';
-    console.log(this.props);
 
     return this.props.currentSong ? (
       <Animated.View
