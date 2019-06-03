@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 import CollapsibleHeader from './CollapsibleHeader';
 import SongTile from './SongTile';
 import songs from '../assets/topTracks.json';
-import { NAV_BAR_HEIGHT } from './constants';
+import { NAV_BAR_HEIGHT, PLAYER_HEIGHT } from './constants';
 
 const { Value, event } = Animated;
 
@@ -72,6 +72,7 @@ class SongsList extends React.Component {
 const styles = StyleSheet.create({
   listContainer: {
     paddingTop: NAV_BAR_HEIGHT,
+    paddingBottom: PLAYER_HEIGHT - 33, // need to investigate
   },
 });
 

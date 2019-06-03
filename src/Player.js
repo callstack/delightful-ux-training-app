@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 //import { withTheme } from '@callstack/react-theme-provider';
 
 import { runTiming } from './utils';
+import { PLAYER_HEIGHT } from './constants';
 
 const { Clock, Value, stopClock, cond, set, block, eq, neq } = Animated;
 
@@ -130,7 +131,7 @@ export default Player;
 
 const style = StyleSheet.create({
   container: {
-    height: 110,
+    height: PLAYER_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
     alignItems: 'center',
