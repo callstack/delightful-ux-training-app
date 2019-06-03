@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 //import { withTheme } from '@callstack/react-theme-provider';
@@ -11,7 +18,7 @@ const { Clock, Value, stopClock, cond, set, block, eq, neq } = Animated;
 class Player extends React.PureComponent {
   static defaultProps = {
     currentSong: '',
-    duration: 10,
+    duration: 50,
   };
 
   playerClock = new Clock();
@@ -93,27 +100,15 @@ class Player extends React.PureComponent {
         </Animated.Code>
         <Text style={{ color: primaryColor }}>{this.props.currentSong}</Text>
         <View style={style.controls}>
-          <Ionicons
-            name="md-pause"
-            size={32}
-            style={style.control}
-            onPress={this.pause}
-            color={contrastColor}
-          />
-          <Ionicons
-            name="md-play"
-            size={32}
-            style={style.control}
-            onPress={this.play}
-            color={contrastColor}
-          />
-          <Ionicons
-            name="md-square"
-            size={32}
-            style={style.control}
-            onPress={this.hidePlayer}
-            color={contrastColor}
-          />
+          <TouchableOpacity style={style.control} onPress={this.pause}>
+            <Ionicons name="md-pause" size={32} color={contrastColor} />
+          </TouchableOpacity>
+          <TouchableOpacity style={style.control} onPress={this.play}>
+            <Ionicons name="md-play" size={32} color={contrastColor} />
+          </TouchableOpacity>
+          <TouchableOpacity style={style.control} onPress={this.hidePlayer}>
+            <Ionicons name="md-square" size={32} color={contrastColor} />
+          </TouchableOpacity>
         </View>
         <View style={[style.progressBar, { backgroundColor: primaryColor }]}>
           <Animated.View
@@ -166,5 +161,6 @@ const style = StyleSheet.create({
     width: 10,
     left: 0,
     position: 'relative',
+    borderRadius: 5,
   },
 });
