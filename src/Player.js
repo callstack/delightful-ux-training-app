@@ -34,7 +34,7 @@ class Player extends React.PureComponent {
     if (this.props.currentSong !== prevProps.currentSong) {
       this.playingState.setValue(0);
       this.progressBarPosition.setValue(0);
-      this.visibilityState.setValue(1);
+      this.visibilityState.setValue(this.props.currentSong ? 1 : 0);
     }
   }
 
@@ -43,9 +43,7 @@ class Player extends React.PureComponent {
   };
 
   hidePlayer = () => {
-    this.playingState.setValue(0);
-    this.progressBarPosition.setValue(0);
-    this.visibilityState.setValue(0);
+    this.props.unsetSong();
   };
 
   play = () => {
@@ -61,7 +59,7 @@ class Player extends React.PureComponent {
       primaryColor = '#FFF',
       contrastColor = '#F8F32B';
 
-    return this.props.currentSong ? (
+    return (
       <Animated.View
         style={[
           style.container,
@@ -123,7 +121,7 @@ class Player extends React.PureComponent {
           />
         </View>
       </Animated.View>
-    ) : null;
+    );
   }
 }
 

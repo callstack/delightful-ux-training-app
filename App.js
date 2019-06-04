@@ -14,12 +14,17 @@ export default class App extends React.Component {
     this.setState({ currentSong: title });
   };
 
+  unsetSong = () => {
+    this.setState({ currentSong: '' });
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
         <Player
           currentSong={this.state.currentSong}
           duration={this.state.currentSongDuration}
+          unsetSong={this.unsetSong}
         />
         <SongList setSong={this.setSong} />
       </SafeAreaView>
