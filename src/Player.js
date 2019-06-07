@@ -38,10 +38,11 @@ class Player extends React.PureComponent {
   };
 
   playerClock = new Clock();
-  visibilityState = new Value(0);
-  playingState = new Value(0);
-  progressBarClock = new Clock();
   playerPosition = new Value(100);
+  playingState = new Value(0);
+  visibilityState = new Value(0);
+
+  progressBarClock = new Clock();
   progressBarPosition = new Value(0);
   maxProgressBarPosition = (Dimensions.get('window').width || 27) - 27; // paddings + indicator size / 2
 

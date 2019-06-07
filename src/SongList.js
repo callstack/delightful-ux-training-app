@@ -72,7 +72,7 @@ class SongsList extends React.Component {
 const styles = StyleSheet.create({
   listContainer: {
     paddingTop: NAV_BAR_HEIGHT,
-    paddingBottom: PLAYER_HEIGHT - 33, // need to investigate
+    paddingBottom: PLAYER_HEIGHT,
   },
 });
 
