@@ -69,7 +69,7 @@ class Player extends React.PureComponent {
           },
         ]}
       >
-        <Animated.Code>
+        <Animated.Code key={this.props.currentSong}>
           {() =>
             block([
               cond(
