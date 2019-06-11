@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 import CollapsibleHeader from './CollapsibleHeader';
 import SongTile from './SongTile';
 import songs from '../assets/topTracks.json';
-import { NAV_BAR_HEIGHT } from './constants';
+import { NAV_BAR_HEIGHT, PLAYER_HEIGHT } from './constants';
 
 const { Value, event } = Animated;
 
@@ -35,7 +35,6 @@ class SongsList extends React.Component {
 
   render() {
     const { data, currentSong } = this.state;
-
     return (
       <View>
         <AnimatedFlatList
@@ -44,7 +43,10 @@ class SongsList extends React.Component {
             <SongTile
               item={item.item}
               onSongRemove={this.onSongRemove}
-              onPress={() => this.onSongSelect(item.item)}
+              onPress={() => {
+                this.props.setSong(item.item.track.album.name);
+                this.onSongSelect(item.item);
+              }}
             />
           )}
           keyExtractor={item => item.track.id}
@@ -70,6 +72,7 @@ class SongsList extends React.Component {
 const styles = StyleSheet.create({
   listContainer: {
     paddingTop: NAV_BAR_HEIGHT,
+    paddingBottom: PLAYER_HEIGHT,
   },
 });
 
