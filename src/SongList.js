@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import CollapsibleHeader from './CollapsibleHeader';
@@ -20,13 +20,9 @@ class SongsList extends React.Component {
   scrollY = new Value(0);
 
   onSongRemove = id => {
-    const index = this.state.data.findIndex(item => item.track.id === id);
-
-    if (index != -1) {
-      this.setState(({ data }) => {
-        [...data.slice(0, index), ...data.slice(index + 1)];
-      });
-    }
+    this.setState(({ data }) => ({
+      data: data.filter(item => item.track.id !== id),
+    }));
   };
 
   onSongSelect = song => {

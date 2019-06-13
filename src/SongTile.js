@@ -7,46 +7,171 @@ import FavouriteIcon from './FavouriteIcon';
 import SmallSongImage from './SmallSongImage';
 import { ROW_HEIGHT } from './constants';
 
-const { Value, interpolate, Extrapolate, Clock, timing } = Animated;
+const {
+  Value,
+  interpolate,
+  Extrapolate,
+  Clock,
+  timing,
+  cond,
+  clockRunning,
+  set,
+  startClock,
+  stopClock,
+  spring,
+  decay,
+  event,
+  add,
+  sub,
+  defined,
+  eq,
+  greaterThan,
+  call,
+} = Animated;
+
+// Inertial slide animation - decay
+function runSwipeDecay(value, velocity) {
+  const state = {
+    finished: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+  };
+
+  const config = {
+    deceleration: 0.995,
+  };
+
+  const clock = new Clock();
+
+  return [
+    cond(clockRunning(clock), 0, [
+      set(state.finished, 0),
+      set(state.velocity, velocity),
+      set(state.position, value),
+      set(config.deceleration, 0.99),
+      startClock(clock),
+    ]),
+    decay(clock, state, config),
+    cond(state.finished, [stopClock(clock)]),
+    state.position,
+  ];
+}
+
+// Hiding animation - going with row height to 0
+function runHideTiming(clock, height, callback) {
+  const state = {
+    finished: new Value(0),
+    frameTime: new Value(0),
+    position: height,
+    time: new Value(0),
+  };
+
+  const config = {
+    toValue: 0,
+    duration: 300,
+    easing: Easing.inOut(Easing.cubic),
+  };
+
+  return [
+    cond(clockRunning(clock), 0, [
+      set(state.finished, 0),
+      set(state.time, 0),
+      set(state.position, height),
+      set(state.frameTime, 0),
+      set(config.toValue, 0),
+      startClock(clock),
+    ]),
+    timing(clock, state, config),
+    cond(state.finished, [stopClock(clock), call([state.finished], callback)]),
+    state.position,
+  ];
+}
+// Returning to the initial position animation
+function runSpring(clock, position, velocity) {
+  const state = {
+    finished: new Value(0),
+    velocity: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+  };
+
+  const config = {
+    damping: 50,
+    mass: 1,
+    stiffness: 121.6,
+    overshootClamping: false,
+    restSpeedThreshold: 0.001,
+    restDisplacementThreshold: 0.001,
+    toValue: new Value(0),
+  };
+
+  return [
+    cond(clockRunning(clock), 0, [
+      set(state.finished, 0),
+      set(state.velocity, velocity),
+      set(state.position, position),
+      startClock(clock),
+    ]),
+    spring(clock, state, config),
+    cond(state.finished, [stopClock(clock)]),
+    state.position,
+  ];
+}
 
 class SongTile extends React.Component {
-  swipeX = new Value(0);
-  opacity = new Value(1);
-  clock = new Clock();
-  height = new Value(ROW_HEIGHT);
+  constructor(props) {
+    super(props);
 
-  heightAnim = timing(this.height, {
-    duration: 500,
-    toValue: 0,
-    easing: Easing.inOut(Easing.ease),
-  });
+    const dragX = new Value(0);
+    const state = new Value(-1);
+    const dragVX = new Value(0);
 
-  offsetX = interpolate(this.swipeX, {
-    inputRange: [0, 100],
-    outputRange: [0, 100],
-    extrapolateLeft: Extrapolate.CLAMP,
-  });
+    this._onGestureEvent = event([
+      { nativeEvent: { translationX: dragX, velocityX: dragVX, state: state } },
+    ]);
 
-  processSwipe = Animated.event([
-    {
-      nativeEvent: {
-        translationX: this.swipeX,
-      },
-    },
-  ]);
+    const transX = new Value();
+    const prevDragX = new Value(0);
 
-  opacity = interpolate(this.height, {
-    inputRange: [0, ROW_HEIGHT],
-    outputRange: [0, 1],
-    extrapolate: Extrapolate.CLAMP,
-  });
+    const clock = new Clock();
 
-  removeTile = ({ nativeEvent }) => {
-    if (nativeEvent.state === State.END && nativeEvent.translationX > 30) {
-      this.heightAnim.start(() => {
-        this.props.onSongRemove(this.props.item.track.id);
-      });
-    }
+    this.height = new Value(ROW_HEIGHT);
+
+    this.translateX = cond(
+      eq(state, State.ACTIVE),
+      [
+        stopClock(clock),
+        set(transX, add(transX, sub(dragX, prevDragX))),
+        set(prevDragX, dragX),
+        transX,
+      ],
+      [
+        set(prevDragX, 0),
+        cond(
+          greaterThan(transX, 80),
+          cond(
+            defined(transX),
+            [
+              runHideTiming(clock, this.height, this.handleHideEnd),
+              runSwipeDecay(transX, dragVX),
+            ],
+            0
+          ),
+          cond(defined(transX), runSpring(clock, transX, dragVX), 0)
+        ),
+      ]
+    );
+
+    this.opacity = interpolate(this.height, {
+      inputRange: [0, ROW_HEIGHT],
+      outputRange: [0, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
+  }
+
+  handleHideEnd = () => {
+    this.props.onSongRemove(this.props.item.track.id);
   };
 
   render() {
@@ -59,15 +184,15 @@ class SongTile extends React.Component {
       <TouchableOpacity onPress={onPress}>
         <Animated.View style={{ opacity: this.opacity, height: this.height }}>
           <PanGestureHandler
-            onGestureEvent={this.processSwipe}
-            onHandlerStateChange={this.removeTile}
-            minOffsetX={10}
+            onGestureEvent={this._onGestureEvent}
+            onHandlerStateChange={this._onGestureEvent}
+            maxPointers={1}
           >
             <Animated.View
               style={[
                 styles.song,
                 {
-                  transform: [{ translateX: this.offsetX }],
+                  transform: [{ translateX: this.translateX }],
                 },
               ]}
             >
