@@ -70,7 +70,7 @@ class FavIcon extends React.Component {
   render() {
     return (
       <TapGestureHandler
-        enabled={this.props.rowState !== 0}
+        enabled={this.props.tapEnabled}
         onHandlerStateChange={this.onTapHandlerStateChange}
         ref={this.props.handlerRef}
       >

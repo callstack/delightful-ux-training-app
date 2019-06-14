@@ -130,7 +130,7 @@ class SongTile extends React.Component {
     super(props);
 
     const dragX = new Value(0);
-    const state = new Value(-1);
+    this.gestureState = new Value(-1);
     const dragVX = new Value(0);
 
     this.onGestureEvent = event([
@@ -138,7 +138,7 @@ class SongTile extends React.Component {
         nativeEvent: {
           translationX: x => set(dragX, cond(greaterThan(x, 0), x, 0)),
           velocityX: dragVX,
-          state: state,
+          state: this.gestureState,
         },
       },
     ]);
@@ -152,7 +152,7 @@ class SongTile extends React.Component {
     this.handlerRef = React.createRef();
 
     this.translateX = cond(
-      eq(state, State.ACTIVE),
+      eq(this.gestureState, State.ACTIVE),
       [
         stopClock(clock),
         set(transX, add(transX, sub(dragX, prevDragX))),
@@ -203,7 +203,7 @@ class SongTile extends React.Component {
 
     return (
       <TapGestureHandler
-        enabled={this.state !== 0}
+        enabled={this.gestureState !== State.ACTIVE}
         onHandlerStateChange={this.onTapHandlerStateChange}
         waitFor={this.handlerRef}
       >
@@ -234,7 +234,7 @@ class SongTile extends React.Component {
                 </View>
               </View>
               <FavouriteIcon
-                rowState={this.state}
+                tapEnabled={this.gestureState !== State.ACTIVE}
                 handlerRef={this.handlerRef}
               />
             </Animated.View>
