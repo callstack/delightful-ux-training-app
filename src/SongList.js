@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
 import CollapsibleHeader from './CollapsibleHeader';
@@ -29,22 +30,26 @@ class SongsList extends React.Component {
     this.setState({ currentSong: song });
   };
 
+  renderRow = item => {
+    return (
+      <SongTile
+        item={item.item}
+        onSongRemove={this.onSongRemove}
+        onPress={() => {
+          this.props.setSong(item.item.track.album.name);
+          this.onSongSelect(item.item);
+        }}
+      />
+    );
+  };
+
   render() {
     const { data, currentSong } = this.state;
     return (
       <View>
         <AnimatedFlatList
           data={data}
-          renderItem={item => (
-            <SongTile
-              item={item.item}
-              onSongRemove={this.onSongRemove}
-              onPress={() => {
-                this.props.setSong(item.item.track.album.name);
-                this.onSongSelect(item.item);
-              }}
-            />
-          )}
+          renderItem={this.renderRow}
           keyExtractor={item => item.track.id}
           bounces={false}
           onScroll={event([

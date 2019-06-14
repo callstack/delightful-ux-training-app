@@ -1,6 +1,10 @@
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import { Text, StyleSheet, View } from 'react-native';
+import {
+  PanGestureHandler,
+  State,
+  TapGestureHandler,
+} from 'react-native-gesture-handler';
 import Animated, { Easing } from 'react-native-reanimated';
 
 import FavouriteIcon from './FavouriteIcon';
@@ -27,6 +31,8 @@ const {
   eq,
   greaterThan,
   call,
+  and,
+  neq,
 } = Animated;
 
 // Inertial slide animation - decay
@@ -127,8 +133,14 @@ class SongTile extends React.Component {
     const state = new Value(-1);
     const dragVX = new Value(0);
 
-    this._onGestureEvent = event([
-      { nativeEvent: { translationX: dragX, velocityX: dragVX, state: state } },
+    this.onGestureEvent = event([
+      {
+        nativeEvent: {
+          translationX: x => set(dragX, cond(greaterThan(x, 0), x, 0)),
+          velocityX: dragVX,
+          state: state,
+        },
+      },
     ]);
 
     const transX = new Value();
@@ -137,6 +149,7 @@ class SongTile extends React.Component {
     const clock = new Clock();
 
     this.height = new Value(ROW_HEIGHT);
+    this.handlerRef = React.createRef();
 
     this.translateX = cond(
       eq(state, State.ACTIVE),
@@ -144,7 +157,6 @@ class SongTile extends React.Component {
         stopClock(clock),
         set(transX, add(transX, sub(dragX, prevDragX))),
         set(prevDragX, dragX),
-        transX,
       ],
       [
         set(prevDragX, 0),
@@ -158,7 +170,11 @@ class SongTile extends React.Component {
             ],
             0
           ),
-          cond(defined(transX), runSpring(clock, transX, dragVX), 0)
+          cond(
+            and(defined(transX), neq(dragX, 0)),
+            runSpring(clock, transX, dragVX),
+            0
+          )
         ),
       ]
     );
@@ -174,19 +190,29 @@ class SongTile extends React.Component {
     this.props.onSongRemove(this.props.item.track.id);
   };
 
+  onTapHandlerStateChange = ({ nativeEvent }) => {
+    if (nativeEvent.oldState === State.ACTIVE) {
+      this.props.onPress();
+    }
+  };
+
   render() {
     const {
       item: { track },
-      onPress,
     } = this.props;
 
     return (
-      <TouchableOpacity onPress={onPress}>
+      <TapGestureHandler
+        enabled={this.state !== 0}
+        onHandlerStateChange={this.onTapHandlerStateChange}
+        waitFor={this.handlerRef}
+      >
         <Animated.View style={{ opacity: this.opacity, height: this.height }}>
           <PanGestureHandler
-            onGestureEvent={this._onGestureEvent}
-            onHandlerStateChange={this._onGestureEvent}
+            onGestureEvent={this.onGestureEvent}
+            onHandlerStateChange={this.onGestureEvent}
             maxPointers={1}
+            minDeltaX={10}
           >
             <Animated.View
               style={[
@@ -207,11 +233,14 @@ class SongTile extends React.Component {
                   </Text>
                 </View>
               </View>
-              <FavouriteIcon />
+              <FavouriteIcon
+                rowState={this.state}
+                handlerRef={this.handlerRef}
+              />
             </Animated.View>
           </PanGestureHandler>
         </Animated.View>
-      </TouchableOpacity>
+      </TapGestureHandler>
     );
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 
 import SongList from './src/SongList';
-import Player from './src/Player';
+// import Player from './src/Player';
 
 export default class App extends React.Component {
   state = {
@@ -21,11 +21,11 @@ export default class App extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <Player
+        {/* <Player
           currentSong={this.state.currentSong}
           duration={this.state.currentSongDuration}
           unsetSong={this.unsetSong}
-        />
+        /> */}
         <SongList setSong={this.setSong} />
       </SafeAreaView>
     );
