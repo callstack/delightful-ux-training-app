@@ -10,8 +10,9 @@ import Animated from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 
-import { runTiming } from './utils';
+import PlayPauseButton from './PlayPauseButton';
 import { PLAYER_HEIGHT } from './constants';
+import { runLinearTiming } from './utils';
 
 const {
   Clock,
@@ -27,7 +28,6 @@ const {
   sub,
 } = Animated;
 
-const backgroundColor = '#21262c';
 const primaryColor = '#FFF';
 const contrastColor = '#F8F32B';
 
@@ -38,7 +38,7 @@ class Player extends React.PureComponent {
   };
 
   playerClock = new Clock();
-  playerPosition = new Value(100);
+  playerPosition = new Value(PLAYER_HEIGHT);
   playingState = new Value(0);
   visibilityState = new Value(0);
 
@@ -58,20 +58,13 @@ class Player extends React.PureComponent {
     }
   }
 
-  showPlayer = () => {
-    this.visibilityState.setValue(1);
-  };
-
   hidePlayer = () => {
+    this.visibilityState.setValue(0);
     this.props.unsetSong();
   };
 
-  play = () => {
-    this.playingState.setValue(1);
-  };
-
-  pause = () => {
-    this.playingState.setValue(0);
+  togglePlay = () => {
+    this.playingState.setValue(cond(eq(this.playingState, 0), 1, 0));
   };
 
   render() {
@@ -84,7 +77,6 @@ class Player extends React.PureComponent {
         style={[
           styles.container,
           {
-            backgroundColor,
             transform: [{ translateY: this.playerPosition }],
           },
         ]}
@@ -92,17 +84,23 @@ class Player extends React.PureComponent {
         <Animated.Code key={this.props.currentSong}>
           {() =>
             block([
+              // showing and hiding the player
               cond(
                 eq(this.visibilityState, 1),
-                runTiming(this.playerClock, this.playerPosition, 0, 300),
+                runLinearTiming(this.playerClock, this.playerPosition, 0),
                 cond(
                   neq(this.playerPosition, 100),
-                  runTiming(this.playerClock, this.playerPosition, 100, 300)
+                  runLinearTiming(
+                    this.playerClock,
+                    this.playerPosition,
+                    PLAYER_HEIGHT
+                  )
                 )
               ),
+              // progressbar animation
               cond(
                 eq(this.playingState, 1),
-                runTiming(
+                runLinearTiming(
                   this.progressBarClock,
                   this.progressBarPosition,
                   this.maxProgressBarPosition,
@@ -114,6 +112,7 @@ class Player extends React.PureComponent {
                 eq(this.progressBarPosition, this.maxProgressBarPosition),
                 set(this.progressBarPosition, 0)
               ),
+              // animating progressbar during drag gesture
               cond(
                 eq(this.state, State.ACTIVE),
                 [
@@ -132,17 +131,17 @@ class Player extends React.PureComponent {
             ])
           }
         </Animated.Code>
-        <Text style={{ color: primaryColor }}>{this.props.currentSong}</Text>
-        <View style={styles.controls}>
-          <TouchableOpacity style={styles.control} onPress={this.pause}>
-            <Ionicons name="md-pause" size={32} color={contrastColor} />
+        <View style={styles.content}>
+          <TouchableOpacity style={styles.chevron} onPress={this.hidePlayer}>
+            <Ionicons name="md-arrow-dropdown" size={24} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.control} onPress={this.play}>
-            <Ionicons name="md-play" size={32} color={contrastColor} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.control} onPress={this.hidePlayer}>
-            <Ionicons name="md-square" size={32} color={contrastColor} />
-          </TouchableOpacity>
+          <Text style={styles.title}>{this.props.currentSong}</Text>
+          <View style={styles.controls}>
+            <PlayPauseButton
+              onPress={this.togglePlay}
+              isPlaying={this.playingState}
+            />
+          </View>
         </View>
         <View style={[styles.progressBar, { backgroundColor: primaryColor }]}>
           <PanGestureHandler
@@ -171,21 +170,35 @@ export default Player;
 const styles = StyleSheet.create({
   container: {
     height: PLAYER_HEIGHT,
-    justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     zIndex: 2,
-    borderTopWidth: 1,
-    borderColor: '#999',
     padding: 10,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    backgroundColor: '#455362',
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   controls: {
-    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 10,
   },
-  control: {
+  title: {
+    flex: 1,
+    color: '#FFF',
+    textAlign: 'center',
+  },
+  chevron: {
     margin: 10,
   },
   progressBar: {
@@ -196,8 +209,8 @@ const styles = StyleSheet.create({
   },
   progressIndicator: {
     top: -4,
-    height: 20,
-    width: 20,
+    height: 10,
+    width: 10,
     left: 0,
     position: 'relative',
     borderRadius: 5,

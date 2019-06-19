@@ -93,6 +93,7 @@ function runHideTiming(clock, height, callback) {
     state.position,
   ];
 }
+
 // Returning to the initial position animation
 function runSpring(clock, position, velocity) {
   const state = {
