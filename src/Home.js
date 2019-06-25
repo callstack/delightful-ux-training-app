@@ -22,7 +22,7 @@ export default class Home extends React.Component {
     }));
   };
 
-  handleSongfavouriteToggle = id => {
+  handleSongFavouriteToggle = id => {
     this.setState(({ songs }) => ({
       songs: songs.map(song =>
         song.track.id === id
@@ -45,7 +45,7 @@ export default class Home extends React.Component {
         <SongList
           onSongPress={this.handleSongPress}
           onSongRemove={this.handleSongRemove}
-          onSongFavouriteToggle={this.handleSongfavouriteToggle}
+          onSongFavouriteToggle={this.handleSongFavouriteToggle}
           songs={this.state.songs}
           currentSong={this.state.currentSong}
         />

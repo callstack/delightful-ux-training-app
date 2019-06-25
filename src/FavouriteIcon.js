@@ -16,7 +16,6 @@ class FavouriteIcon extends React.Component {
 
   onTapHandlerStateChange = ({ nativeEvent }) => {
     if (nativeEvent.oldState === State.ACTIVE) {
-      // this.animation.setValue(this.props.checked ? 0.2 : 1);
       this.props.onToggle();
     }
   };

@@ -126,7 +126,7 @@ function runSpring(clock, position, velocity) {
   ];
 }
 
-class SongTile extends React.PureComponent {
+class SongTile extends React.Component {
   constructor(props) {
     super(props);
 
