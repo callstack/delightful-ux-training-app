@@ -45,7 +45,7 @@ function runSwipeDecay(value, velocity) {
   };
 
   const config = {
-    deceleration: 0.995,
+    deceleration: new Value(0.995),
   };
 
   const clock = new Clock();
@@ -74,8 +74,8 @@ function runHideTiming(clock, height, callback) {
   };
 
   const config = {
-    toValue: 0,
-    duration: 300,
+    toValue: new Value(0),
+    duration: new Value(300),
     easing: Easing.inOut(Easing.cubic),
   };
 
@@ -144,7 +144,7 @@ class SongTile extends React.Component {
       },
     ]);
 
-    const transX = new Value();
+    const transX = new Value(0);
     const prevDragX = new Value(0);
 
     const clock = new Clock();
@@ -235,6 +235,8 @@ class SongTile extends React.Component {
                 </View>
                 <FavouriteIcon
                   tapEnabled={this.gestureState !== State.ACTIVE}
+                  onToggle={() => this.props.onSongFavouriteToggle(track.id)}
+                  checked={this.props.item.isFavourite}
                   handlerRef={this.handlerRef}
                 />
               </View>

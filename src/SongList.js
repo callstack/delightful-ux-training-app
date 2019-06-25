@@ -11,7 +11,13 @@ const { Value, event } = Animated;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-function SongList({ songs, currentSong, onSongPress, onSongRemove }) {
+function SongList({
+  songs,
+  currentSong,
+  onSongPress,
+  onSongRemove,
+  onSongFavouriteToggle,
+}) {
   const scrollY = new Value(0);
 
   const renderRow = item => {
@@ -19,6 +25,7 @@ function SongList({ songs, currentSong, onSongPress, onSongRemove }) {
       <SongTile
         item={item.item}
         onSongRemove={onSongRemove}
+        onSongFavouriteToggle={onSongFavouriteToggle}
         onPress={() => {
           onSongPress(item.item);
         }}
