@@ -225,7 +225,7 @@ class SongTile extends React.Component {
             >
               <View style={styles.innerContainer}>
                 <SmallSongImage uri={track.album.images[0].url} />
-                <View>
+                <View style={styles.title}>
                   <Text style={styles.text} numberOfLines={1}>
                     {track.name}
                   </Text>
@@ -233,11 +233,11 @@ class SongTile extends React.Component {
                     {track.album.name}
                   </Text>
                 </View>
+                <FavouriteIcon
+                  tapEnabled={this.gestureState !== State.ACTIVE}
+                  handlerRef={this.handlerRef}
+                />
               </View>
-              <FavouriteIcon
-                tapEnabled={this.gestureState !== State.ACTIVE}
-                handlerRef={this.handlerRef}
-              />
             </Animated.View>
           </PanGestureHandler>
         </Animated.View>
@@ -265,9 +265,14 @@ const styles = StyleSheet.create({
     elevation: 1,
     marginBottom: 3,
   },
+  title: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
   innerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    overflow: 'hidden',
   },
   text: {
     color: '#fff',

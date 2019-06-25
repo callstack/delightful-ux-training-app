@@ -5,69 +5,49 @@ import Animated from 'react-native-reanimated';
 
 import CollapsibleHeader from './CollapsibleHeader';
 import SongTile from './SongTile';
-import songs from '../assets/topTracks.json';
 import { NAV_BAR_HEIGHT, PLAYER_HEIGHT } from './constants';
 
 const { Value, event } = Animated;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-class SongsList extends React.Component {
-  state = {
-    data: songs.tracks,
-    currentSong: songs.tracks[0],
-  };
+function SongList({ songs, currentSong, onSongPress, onSongRemove }) {
+  const scrollY = new Value(0);
 
-  scrollY = new Value(0);
-
-  onSongRemove = id => {
-    this.setState(({ data }) => ({
-      data: data.filter(item => item.track.id !== id),
-    }));
-  };
-
-  onSongSelect = song => {
-    this.setState({ currentSong: song });
-  };
-
-  renderRow = item => {
+  const renderRow = item => {
     return (
       <SongTile
         item={item.item}
-        onSongRemove={this.onSongRemove}
+        onSongRemove={onSongRemove}
         onPress={() => {
-          this.props.setSong(item.item.track.album.name);
-          this.onSongSelect(item.item);
+          onSongPress(item.item);
         }}
       />
     );
   };
 
-  render() {
-    const { data, currentSong } = this.state;
-    return (
-      <View>
-        <AnimatedFlatList
-          data={data}
-          renderItem={this.renderRow}
-          keyExtractor={item => item.track.id}
-          bounces={false}
-          onScroll={event([
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: this.scrollY,
-                },
+  return (
+    <View>
+      <AnimatedFlatList
+        data={songs}
+        renderItem={renderRow}
+        keyExtractor={item => item.track.id}
+        bounces={false}
+        onScroll={event([
+          {
+            nativeEvent: {
+              contentOffset: {
+                y: scrollY,
               },
             },
-          ])}
-          scrollEventThrottle={16}
-          contentContainerStyle={styles.listContainer}
-        />
-        <CollapsibleHeader scrollY={this.scrollY} currentSong={currentSong} />
-      </View>
-    );
-  }
+          },
+        ])}
+        scrollEventThrottle={16}
+        contentContainerStyle={styles.listContainer}
+      />
+      <CollapsibleHeader scrollY={scrollY} currentSong={currentSong} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -77,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SongsList;
+export default SongList;

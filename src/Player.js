@@ -1,14 +1,7 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
 
 import PlayPauseButton from './PlayPauseButton';
 import { PLAYER_HEIGHT } from './constants';
@@ -22,10 +15,13 @@ const {
   set,
   block,
   eq,
-  neq,
   event,
   add,
   sub,
+  multiply,
+  divide,
+  max,
+  min,
 } = Animated;
 
 const primaryColor = '#FFF';
@@ -38,13 +34,14 @@ class Player extends React.PureComponent {
   };
 
   playerClock = new Clock();
-  playerPosition = new Value(PLAYER_HEIGHT);
   playingState = new Value(0);
-  visibilityState = new Value(0);
 
   progressBarClock = new Clock();
   progressBarPosition = new Value(0);
-  maxProgressBarPosition = (Dimensions.get('window').width || 27) - 27; // paddings + indicator size / 2
+  progressBarInitialPosition = new Value(0);
+  maxProgressBarPosition = new Value(
+    (Dimensions.get('window').width || 27) - 27
+  ); // paddings + indicator size / 2
 
   dragX = new Value(0);
   state = new Value(-1);
@@ -54,14 +51,8 @@ class Player extends React.PureComponent {
     if (this.props.currentSong !== prevProps.currentSong) {
       this.playingState.setValue(0);
       this.progressBarPosition.setValue(0);
-      this.visibilityState.setValue(this.props.currentSong ? 1 : 0);
     }
   }
-
-  hidePlayer = () => {
-    this.visibilityState.setValue(0);
-    this.props.unsetSong();
-  };
 
   togglePlay = () => {
     this.playingState.setValue(cond(eq(this.playingState, 0), 1, 0));
@@ -69,34 +60,19 @@ class Player extends React.PureComponent {
 
   render() {
     this._onGestureEvent = event([
-      { nativeEvent: { translationX: this.dragX, state: this.state } },
+      {
+        nativeEvent: {
+          translationX: this.dragX,
+          state: this.state,
+        },
+      },
     ]);
 
     return (
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            transform: [{ translateY: this.playerPosition }],
-          },
-        ]}
-      >
+      <View style={styles.container}>
         <Animated.Code key={this.props.currentSong}>
           {() =>
             block([
-              // showing and hiding the player
-              cond(
-                eq(this.visibilityState, 1),
-                runLinearTiming(this.playerClock, this.playerPosition, 0),
-                cond(
-                  neq(this.playerPosition, 100),
-                  runLinearTiming(
-                    this.playerClock,
-                    this.playerPosition,
-                    PLAYER_HEIGHT
-                  )
-                )
-              ),
               // progressbar animation
               cond(
                 eq(this.playingState, 1),
@@ -104,13 +80,24 @@ class Player extends React.PureComponent {
                   this.progressBarClock,
                   this.progressBarPosition,
                   this.maxProgressBarPosition,
-                  this.props.duration * 1000
+                  multiply(
+                    divide(
+                      sub(
+                        this.maxProgressBarPosition,
+                        this.progressBarInitialPosition
+                      ),
+                      this.maxProgressBarPosition
+                    ),
+                    this.props.duration * 1000
+                  )
                 ),
-                stopClock(this.progressBarClock)
-              ),
-              cond(
-                eq(this.progressBarPosition, this.maxProgressBarPosition),
-                set(this.progressBarPosition, 0)
+                [
+                  stopClock(this.progressBarClock),
+                  set(
+                    this.progressBarInitialPosition,
+                    this.progressBarPosition
+                  ),
+                ]
               ),
               // animating progressbar during drag gesture
               cond(
@@ -118,13 +105,23 @@ class Player extends React.PureComponent {
                 [
                   set(
                     this.progressBarPosition,
-                    add(
-                      this.progressBarPosition,
-                      sub(this.dragX, this.prevDragX)
+                    min(
+                      this.maxProgressBarPosition,
+                      max(
+                        0,
+                        add(
+                          this.progressBarPosition,
+                          sub(this.dragX, this.prevDragX)
+                        )
+                      )
                     )
                   ),
                   set(this.prevDragX, this.dragX),
                   set(this.playingState, 0),
+                  set(
+                    this.progressBarInitialPosition,
+                    this.progressBarPosition
+                  ),
                 ],
                 set(this.prevDragX, 0)
               ),
@@ -132,10 +129,9 @@ class Player extends React.PureComponent {
           }
         </Animated.Code>
         <View style={styles.content}>
-          <TouchableOpacity style={styles.chevron} onPress={this.hidePlayer}>
-            <Ionicons name="md-arrow-dropdown" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.title}>{this.props.currentSong}</Text>
+          <Text style={styles.title}>
+            {this.props.currentSong.track.album.name}
+          </Text>
           <View style={styles.controls}>
             <PlayPauseButton
               onPress={this.togglePlay}
@@ -157,10 +153,11 @@ class Player extends React.PureComponent {
                   backgroundColor: contrastColor,
                 },
               ]}
+              hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
             />
           </PanGestureHandler>
         </View>
-      </Animated.View>
+      </View>
     );
   }
 }
@@ -196,10 +193,6 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     color: '#FFF',
-    textAlign: 'center',
-  },
-  chevron: {
-    margin: 10,
   },
   progressBar: {
     alignSelf: 'stretch',
