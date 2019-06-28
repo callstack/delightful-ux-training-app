@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 
 import SongList from './SongList';
 import Player from './Player';
@@ -58,5 +58,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#21262c',
+    paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
   },
 });

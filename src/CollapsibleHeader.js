@@ -1,46 +1,26 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { NAV_BAR_HEIGHT } from './constants';
 
-const { interpolate, Extrapolate, multiply, add } = Animated;
+const { interpolate, Extrapolate, multiply } = Animated;
 
 class CollapsibleHeader extends React.Component {
   translateY = interpolate(this.props.scrollY, {
-    inputRange: [0, 100],
-    outputRange: [0, -100],
+    inputRange: [0, 130],
+    outputRange: [0, 130],
     extrapolate: Extrapolate.CLAMP,
   });
 
-  fontSize = interpolate(this.props.scrollY, {
-    inputRange: [0, 25],
-    outputRange: [24, 20],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
-  titleOpacity = interpolate(this.props.scrollY, {
-    inputRange: [0, 25],
+  opacity = interpolate(this.props.scrollY, {
+    inputRange: [0, 200],
     outputRange: [1, 0],
     extrapolate: Extrapolate.CLAMP,
   });
 
-  contentTranslateY = multiply(this.translateY, -1);
-
-  imageScale = interpolate(this.props.scrollY, {
-    inputRange: [0, 100],
+  scale = interpolate(this.props.scrollY, {
+    inputRange: [0, 130],
     outputRange: [1, 0.6],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
-  imageTranslateY = interpolate(this.props.scrollY, {
-    inputRange: [0, 100],
-    outputRange: [0, -70],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
-  borderRadius = interpolate(this.props.scrollY, {
-    inputRange: [0, 100],
-    outputRange: [10, 60],
     extrapolate: Extrapolate.CLAMP,
   });
 
@@ -48,56 +28,40 @@ class CollapsibleHeader extends React.Component {
     const { currentSong } = this.props;
 
     return (
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            transform: [
-              {
-                translateY: this.translateY,
-              },
-            ],
-          },
-        ]}
-      >
-        <Animated.Text
-          style={[
-            styles.artistName,
-            {
-              fontSize: this.fontSize,
-              opacity: this.titleOpacity,
-              transform: [
-                {
-                  translateY: this.contentTranslateY,
-                },
-              ],
-            },
-          ]}
-        >
-          {currentSong.track.artists[0].name}
-        </Animated.Text>
+      <View style={styles.container}>
         <Animated.View
           style={[
             styles.imageContainer,
             {
-              borderRadius: this.borderRadius,
+              opacity: this.opacity,
               transform: [
                 {
-                  translateY: add(this.imageTranslateY, this.contentTranslateY),
-                  scale: this.imageScale,
+                  translateY: multiply(this.translateY, 0.3),
+                  scale: this.scale,
                 },
               ],
             },
           ]}
         >
-          <Animated.Image
+          <Image
             source={{
               uri: currentSong.track.album.images[0].url,
             }}
             style={styles.image}
           />
+          <Text style={styles.artistName}>
+            {currentSong.track.artists[0].name}
+          </Text>
         </Animated.View>
-      </Animated.View>
+        <Animated.View
+          style={[
+            styles.shadowContainer,
+            {
+              height: this.translateY,
+            },
+          ]}
+        />
+      </View>
     );
   }
 }
@@ -113,21 +77,32 @@ const styles = StyleSheet.create({
     height: NAV_BAR_HEIGHT,
     alignItems: 'center',
     backgroundColor: '#21262c',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#fff',
+  },
+  shadowContainer: {
+    width: '100%',
+    backgroundColor: '#21262c',
+    bottom: 0,
+    position: 'absolute',
+    elevation: 6,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
   },
   artistName: {
     color: '#fff',
+    padding: 15,
+    fontSize: 20,
   },
   imageContainer: {
     position: 'absolute',
-    top: 50,
+    top: 20,
     overflow: 'hidden',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#5c7ea8',
+    alignItems: 'center',
   },
   image: {
-    width: 120,
-    height: 120,
+    width: 150,
+    height: 150,
+    borderRadius: 5,
   },
 });

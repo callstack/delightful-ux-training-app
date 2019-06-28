@@ -265,7 +265,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 0.2,
     elevation: 1,
-    marginBottom: 3,
   },
   title: {
     flex: 1,

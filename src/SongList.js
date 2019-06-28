@@ -4,6 +4,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
 import CollapsibleHeader from './CollapsibleHeader';
+import HeaderTitle from './HeaderTitle';
 import SongTile from './SongTile';
 import { NAV_BAR_HEIGHT, PLAYER_HEIGHT } from './constants';
 
@@ -35,6 +36,8 @@ function SongList({
 
   return (
     <View>
+      <CollapsibleHeader scrollY={scrollY} currentSong={currentSong} />
+
       <AnimatedFlatList
         data={songs}
         renderItem={renderRow}
@@ -52,7 +55,9 @@ function SongList({
         scrollEventThrottle={16}
         contentContainerStyle={styles.listContainer}
       />
-      <CollapsibleHeader scrollY={scrollY} currentSong={currentSong} />
+
+      {/* We need it here because it should be over the list */}
+      <HeaderTitle scrollY={scrollY} currentSong={currentSong} />
     </View>
   );
 }
