@@ -1,10 +1,6 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import {
-  PanGestureHandler,
-  State,
-  TapGestureHandler,
-} from 'react-native-gesture-handler';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import Animated, { Easing } from 'react-native-reanimated';
 
 import FavouriteIcon from './FavouriteIcon';
@@ -191,10 +187,8 @@ class SongTile extends React.Component {
     this.props.onSongRemove(this.props.item.track.id);
   };
 
-  onTapHandlerStateChange = ({ nativeEvent }) => {
-    if (nativeEvent.oldState === State.ACTIVE) {
-      this.props.onPress();
-    }
+  handlePress = () => {
+    this.props.onPress(this.props.item);
   };
 
   render() {
@@ -203,12 +197,8 @@ class SongTile extends React.Component {
     } = this.props;
 
     return (
-      <TapGestureHandler
-        enabled={this.gestureState !== State.ACTIVE}
-        onHandlerStateChange={this.onTapHandlerStateChange}
-        waitFor={this.handlerRef}
-      >
-        <Animated.View style={{ opacity: this.opacity, height: this.height }}>
+      <TouchableOpacity onPress={this.handlePress}>
+        <View style={styles.container}>
           <PanGestureHandler
             onGestureEvent={this.onGestureEvent}
             onHandlerStateChange={this.onGestureEvent}
@@ -220,6 +210,8 @@ class SongTile extends React.Component {
                 styles.song,
                 {
                   transform: [{ translateX: this.translateX }],
+                  opacity: this.opacity,
+                  height: this.height,
                 },
               ]}
             >
@@ -242,13 +234,16 @@ class SongTile extends React.Component {
               </View>
             </Animated.View>
           </PanGestureHandler>
-        </Animated.View>
-      </TapGestureHandler>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+  },
   song: {
     flex: 1,
     width: '100%',

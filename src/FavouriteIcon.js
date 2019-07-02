@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { TapGestureHandler, State } from 'react-native-gesture-handler';
 
 import { runLinearTiming } from './utils';
 import iconHeart from '../assets/icon_heart.png';
@@ -14,12 +13,6 @@ class FavouriteIcon extends React.Component {
   animation = new Value(this.props.checked ? 1 : 0.2);
   color = block([runLinearTiming(this.clock, this.progress, this.animation)]);
 
-  onTapHandlerStateChange = ({ nativeEvent }) => {
-    if (nativeEvent.oldState === State.ACTIVE) {
-      this.props.onToggle();
-    }
-  };
-
   componentDidUpdate(prevProps) {
     if (prevProps.checked !== this.props.checked) {
       this.animation.setValue(this.props.checked ? 1 : 0.2);
@@ -28,10 +21,9 @@ class FavouriteIcon extends React.Component {
 
   render() {
     return (
-      <TapGestureHandler
+      <TouchableWithoutFeedback
         enabled={this.props.tapEnabled}
-        onHandlerStateChange={this.onTapHandlerStateChange}
-        ref={this.props.handlerRef}
+        onPress={this.props.onToggle}
       >
         <Animated.View
           style={{
@@ -40,7 +32,7 @@ class FavouriteIcon extends React.Component {
         >
           <Animated.Image source={iconHeart} style={[style.icon]} />
         </Animated.View>
-      </TapGestureHandler>
+      </TouchableWithoutFeedback>
     );
   }
 }

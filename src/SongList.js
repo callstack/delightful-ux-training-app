@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { View, StyleSheet, FlatList } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import CollapsibleHeader from './CollapsibleHeader';
@@ -27,9 +26,7 @@ function SongList({
         item={item.item}
         onSongRemove={onSongRemove}
         onSongFavouriteToggle={onSongFavouriteToggle}
-        onPress={() => {
-          onSongPress(item.item);
-        }}
+        onPress={onSongPress}
       />
     );
   };
