@@ -6,6 +6,7 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import PlayPauseButton from './PlayPauseButton';
 import { PLAYER_HEIGHT } from './constants';
 import { runLinearTiming } from './utils';
+import { withTheme } from './theming';
 
 const {
   Clock,
@@ -23,9 +24,6 @@ const {
   max,
   min,
 } = Animated;
-
-const primaryColor = '#FFF';
-const contrastColor = '#F8F32B';
 
 class Player extends React.PureComponent {
   static defaultProps = {
@@ -68,8 +66,10 @@ class Player extends React.PureComponent {
       },
     ]);
 
+    const cumputedStyles = styles(this.props.theme);
+
     return (
-      <View style={styles.container}>
+      <View style={cumputedStyles.container}>
         <Animated.Code key={this.props.currentSong}>
           {() =>
             block([
@@ -128,18 +128,23 @@ class Player extends React.PureComponent {
             ])
           }
         </Animated.Code>
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {this.props.currentSong.track.album.name}
-          </Text>
-          <View style={styles.controls}>
+        <View style={cumputedStyles.content}>
+          <View style={cumputedStyles.textContainer}>
+            <Text style={cumputedStyles.title}>
+              {this.props.currentSong.track.name}
+            </Text>
+            <Text style={cumputedStyles.subTitle}>
+              {this.props.currentSong.track.album.name}
+            </Text>
+          </View>
+          <View style={cumputedStyles.controls}>
             <PlayPauseButton
               onPress={this.togglePlay}
               isPlaying={this.playingState}
             />
           </View>
         </View>
-        <View style={[styles.progressBar, { backgroundColor: primaryColor }]}>
+        <View style={[cumputedStyles.progressBar]}>
           <PanGestureHandler
             maxPointers={1}
             onGestureEvent={this._onGestureEvent}
@@ -147,10 +152,9 @@ class Player extends React.PureComponent {
           >
             <Animated.View
               style={[
-                styles.progressIndicator,
+                cumputedStyles.progressIndicator,
                 {
                   transform: [{ translateX: this.progressBarPosition }],
-                  backgroundColor: contrastColor,
                 },
               ]}
               hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
@@ -162,50 +166,64 @@ class Player extends React.PureComponent {
   }
 }
 
-export default Player;
+export default withTheme(Player);
 
-const styles = StyleSheet.create({
-  container: {
-    height: PLAYER_HEIGHT,
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 2,
-    padding: 10,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    backgroundColor: '#455362',
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  controls: {
-    justifyContent: 'flex-end',
-    marginBottom: 10,
-  },
-  title: {
-    flex: 1,
-    color: '#FFF',
-  },
-  progressBar: {
-    alignSelf: 'stretch',
-    height: 3,
-    backgroundColor: 'red',
-    marginBottom: 15,
-  },
-  progressIndicator: {
-    top: -4,
-    height: 10,
-    width: 10,
-    left: 0,
-    position: 'relative',
-    borderRadius: 5,
-  },
-});
+const styles = theme =>
+  StyleSheet.create({
+    container: {
+      height: PLAYER_HEIGHT,
+      alignItems: 'stretch',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 2,
+      paddingHorizontal: 10,
+      shadowColor: 'black',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.5,
+      shadowRadius: 10,
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+      backgroundColor: theme.backgroundColor,
+    },
+    content: {
+      flexDirection: 'row',
+      flex: 1,
+      alignContent: 'center',
+      alignItems: 'stretch',
+    },
+    controls: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    textContainer: {
+      flex: 1,
+      paddingVertical: 10,
+      justifyContent: 'center',
+    },
+    subTitle: {
+      color: theme.secondaryTextColor,
+      fontSize: 14,
+    },
+    title: {
+      color: theme.primaryTextColor,
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    progressBar: {
+      alignSelf: 'stretch',
+      height: 3,
+      marginBottom: 15,
+      backgroundColor: theme.primaryTextColor,
+    },
+    progressIndicator: {
+      top: -4,
+      height: 10,
+      width: 10,
+      left: 0,
+      position: 'relative',
+      borderRadius: 5,
+      backgroundColor: theme.accentColor,
+    },
+  });

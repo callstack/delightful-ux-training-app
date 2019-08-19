@@ -37,6 +37,8 @@ class FavouriteIcon extends React.Component {
   }
 }
 
+export default FavouriteIcon;
+
 const style = StyleSheet.create({
   icon: {
     width: 30,
@@ -45,5 +47,3 @@ const style = StyleSheet.create({
     tintColor: 'white',
   },
 });
-
-export default FavouriteIcon;

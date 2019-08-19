@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { NAV_BAR_HEIGHT } from './constants';
+import { withTheme } from './theming';
 
 const { interpolate, Extrapolate, multiply } = Animated;
 
@@ -26,12 +27,12 @@ class CollapsibleHeader extends React.Component {
 
   render() {
     const { currentSong } = this.props;
-
+    const computedStyles = styles(this.props.theme);
     return (
-      <View style={styles.container}>
+      <View style={computedStyles.container}>
         <Animated.View
           style={[
-            styles.imageContainer,
+            computedStyles.imageContainer,
             {
               opacity: this.opacity,
               transform: [
@@ -47,15 +48,15 @@ class CollapsibleHeader extends React.Component {
             source={{
               uri: currentSong.track.album.images[0].url,
             }}
-            style={styles.image}
+            style={computedStyles.image}
           />
-          <Text style={styles.artistName}>
+          <Text style={computedStyles.artistName}>
             {currentSong.track.artists[0].name}
           </Text>
         </Animated.View>
         <Animated.View
           style={[
-            styles.shadowContainer,
+            computedStyles.shadowContainer,
             {
               height: this.translateY,
             },
@@ -66,43 +67,44 @@ class CollapsibleHeader extends React.Component {
   }
 }
 
-export default CollapsibleHeader;
+export default withTheme(CollapsibleHeader);
 
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: NAV_BAR_HEIGHT,
-    alignItems: 'center',
-    backgroundColor: '#21262c',
-  },
-  shadowContainer: {
-    width: '100%',
-    backgroundColor: '#21262c',
-    bottom: 0,
-    position: 'absolute',
-    elevation: 6,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
-  },
-  artistName: {
-    color: '#fff',
-    padding: 15,
-    fontSize: 20,
-  },
-  imageContainer: {
-    position: 'absolute',
-    top: 20,
-    overflow: 'hidden',
-    alignItems: 'center',
-  },
-  image: {
-    width: 150,
-    height: 150,
-    borderRadius: 5,
-  },
-});
+const styles = theme =>
+  StyleSheet.create({
+    container: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: NAV_BAR_HEIGHT,
+      alignItems: 'center',
+      backgroundColor: theme.backgroundColor,
+    },
+    shadowContainer: {
+      width: '100%',
+      backgroundColor: theme.backgroundColor,
+      bottom: 0,
+      position: 'absolute',
+      elevation: 6,
+      shadowColor: 'black',
+      shadowOffset: { width: 0, height: 5 },
+      shadowOpacity: 0.5,
+      shadowRadius: 20,
+    },
+    artistName: {
+      color: theme.primaryTextColor,
+      padding: 15,
+      fontSize: 20,
+    },
+    imageContainer: {
+      position: 'absolute',
+      top: 20,
+      overflow: 'hidden',
+      alignItems: 'center',
+    },
+    image: {
+      width: 150,
+      height: 150,
+      borderRadius: 5,
+    },
+  });

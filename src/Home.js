@@ -3,9 +3,10 @@ import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 
 import SongList from './SongList';
 import Player from './Player';
+import { withTheme } from './theming';
 import songs from '../assets/topTracks.json';
 
-export default class Home extends React.Component {
+class Home extends React.Component {
   state = {
     currentSong: songs.tracks[0],
     currentSongDuration: 10,
@@ -37,7 +38,13 @@ export default class Home extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          { backgroundColor: this.props.theme.backgroundColor },
+        ]}
+      >
+        <StatusBar barStyle="light-content" />
         <Player
           currentSong={this.state.currentSong}
           duration={this.state.currentSongDuration}
@@ -54,10 +61,12 @@ export default class Home extends React.Component {
   }
 }
 
+export default withTheme(Home);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#21262c',
+    backgroundColor: '#131313',
     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
   },
 });

@@ -1,7 +1,12 @@
 import React from 'react';
 
 import Home from './src/Home';
+import { ThemeProvider } from './src/theming';
 
-export default function App() {
-  return <Home />;
-}
+const App = () => (
+  <ThemeProvider>
+    <Home />
+  </ThemeProvider>
+);
+
+export default App;

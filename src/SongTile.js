@@ -6,6 +6,7 @@ import Animated, { Easing } from 'react-native-reanimated';
 import FavouriteIcon from './FavouriteIcon';
 import SmallSongImage from './SmallSongImage';
 import { ROW_HEIGHT } from './constants';
+import { withTheme } from './theming';
 
 const {
   Value,
@@ -196,9 +197,11 @@ class SongTile extends React.Component {
       item: { track },
     } = this.props;
 
+    const computedStyles = styles(this.props.theme);
+
     return (
       <TouchableOpacity onPress={this.handlePress}>
-        <View style={styles.container}>
+        <View style={computedStyles.container}>
           <PanGestureHandler
             onGestureEvent={this.onGestureEvent}
             onHandlerStateChange={this.onGestureEvent}
@@ -207,7 +210,7 @@ class SongTile extends React.Component {
           >
             <Animated.View
               style={[
-                styles.song,
+                computedStyles.song,
                 {
                   transform: [{ translateX: this.translateX }],
                   opacity: this.opacity,
@@ -215,13 +218,13 @@ class SongTile extends React.Component {
                 },
               ]}
             >
-              <View style={styles.innerContainer}>
+              <View style={computedStyles.innerContainer}>
                 <SmallSongImage uri={track.album.images[0].url} />
-                <View style={styles.title}>
-                  <Text style={styles.text} numberOfLines={1}>
+                <View style={computedStyles.title}>
+                  <Text style={computedStyles.titleText} numberOfLines={1}>
                     {track.name}
                   </Text>
-                  <Text style={styles.text} numberOfLines={1}>
+                  <Text style={computedStyles.subtitleText} numberOfLines={1}>
                     {track.album.name}
                   </Text>
                 </View>
@@ -240,39 +243,43 @@ class SongTile extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
-  },
-  song: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: '#21262c',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    shadowColor: '#fff',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 0.2,
-    elevation: 1,
-  },
-  title: {
-    flex: 1,
-    paddingHorizontal: 10,
-  },
-  innerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  text: {
-    color: '#fff',
-  },
-});
+export default withTheme(SongTile);
 
-export default SongTile;
+const styles = theme =>
+  StyleSheet.create({
+    container: {
+      overflow: 'hidden',
+    },
+    song: {
+      flex: 1,
+      width: '100%',
+      backgroundColor: theme.backgroundColor,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexDirection: 'row',
+      paddingHorizontal: 10,
+      shadowColor: theme.primaryTextColor,
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 0.2,
+      elevation: 1,
+    },
+    title: {
+      flex: 1,
+      paddingHorizontal: 10,
+    },
+    innerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      overflow: 'hidden',
+    },
+    titleText: {
+      color: theme.primaryTextColor,
+    },
+    subtitleText: {
+      color: theme.secondaryTextColor,
+    },
+  });
