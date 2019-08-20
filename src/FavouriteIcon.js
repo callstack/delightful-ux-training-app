@@ -3,6 +3,7 @@ import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { runLinearTiming } from './utils';
+import { withTheme } from './theming';
 import iconHeart from '../assets/icon_heart.png';
 
 const { Clock, Value, block } = Animated;
@@ -30,20 +31,23 @@ class FavouriteIcon extends React.Component {
             opacity: this.color,
           }}
         >
-          <Animated.Image source={iconHeart} style={[style.icon]} />
+          <Animated.Image
+            source={iconHeart}
+            style={[style.icon, { tintColor: this.props.theme.accentColor }]}
+          />
         </Animated.View>
       </TouchableWithoutFeedback>
     );
   }
 }
 
-export default FavouriteIcon;
+export default withTheme(FavouriteIcon);
 
 const style = StyleSheet.create({
   icon: {
     width: 30,
     height: 30,
     marginRight: 10,
-    tintColor: 'white',
+    // tintColor: 'white',
   },
 });
