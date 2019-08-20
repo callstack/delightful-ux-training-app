@@ -183,9 +183,10 @@ const styles = theme =>
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.5,
       shadowRadius: 10,
+      elevation: 16,
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: theme.secondaryBackgroundColor,
     },
     content: {
       flexDirection: 'row',

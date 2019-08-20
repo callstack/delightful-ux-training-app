@@ -48,6 +48,7 @@ const styles = theme =>
       padding: 15,
       borderBottomWidth: 1,
       borderBottomColor: theme.secondaryBackgroundColor,
+      elevation: 5,
     },
     text: {
       color: theme.primaryTextColor,

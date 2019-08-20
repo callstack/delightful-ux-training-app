@@ -85,7 +85,7 @@ const styles = theme =>
       backgroundColor: theme.backgroundColor,
       bottom: 0,
       position: 'absolute',
-      elevation: 6,
+      elevation: 16,
       shadowColor: 'black',
       shadowOffset: { width: 0, height: 5 },
       shadowOpacity: 0.5,

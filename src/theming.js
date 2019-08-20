@@ -10,7 +10,7 @@ const darkTheme = {
 
 const lightTheme = {
   backgroundColor: '#FFF',
-  secondaryBackgroundColor: '#FFF',
+  secondaryBackgroundColor: '#f5f9ff',
   primaryTextColor: '#131313',
   secondaryTextColor: '#333',
   accentColor: '#3903fc',
