@@ -4,9 +4,9 @@ import Animated from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 import PlayPauseButton from './PlayPauseButton';
-import { PLAYER_HEIGHT } from './constants';
-import { runLinearTiming } from './utils';
-import { withTheme } from './theming';
+import { PLAYER_HEIGHT } from '../utils/constants';
+import { runLinearTiming } from '../utils/utils';
+import { withTheme } from '../utils/theming';
 
 const {
   Clock,

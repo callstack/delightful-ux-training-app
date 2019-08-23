@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 
-import SongList from './SongList';
-import Player from './Player';
-import { withTheme } from './theming';
-import songs from '../assets/topTracks.json';
+import SongList from '../components/SongList';
+import Player from '../components/Player';
+import { withTheme } from '../utils/theming';
+import songs from '../../assets/topTracks.json';
 
 class Home extends React.Component {
   state = {
@@ -37,6 +37,7 @@ class Home extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <SafeAreaView
         style={[
@@ -44,7 +45,11 @@ class Home extends React.Component {
           { backgroundColor: this.props.theme.backgroundColor },
         ]}
       >
-        <StatusBar barStyle="light-content" />
+        <StatusBar
+          barStyle={
+            this.props.theme.name === 'dark' ? 'light-content' : 'dark-content'
+          }
+        />
         <Player
           currentSong={this.state.currentSong}
           duration={this.state.currentSongDuration}
@@ -66,7 +71,6 @@ export default withTheme(Home);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#131313',
     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
   },
 });

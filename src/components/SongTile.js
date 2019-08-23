@@ -5,8 +5,8 @@ import Animated, { Easing } from 'react-native-reanimated';
 
 import FavouriteIcon from './FavouriteIcon';
 import SmallSongImage from './SmallSongImage';
-import { ROW_HEIGHT } from './constants';
-import { withTheme } from './theming';
+import { ROW_HEIGHT } from '../utils/constants';
+import { withTheme } from '../utils/theming';
 
 const {
   Value,

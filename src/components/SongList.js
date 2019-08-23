@@ -5,7 +5,7 @@ import Animated from 'react-native-reanimated';
 import CollapsibleHeader from './CollapsibleHeader';
 import HeaderTitle from './HeaderTitle';
 import SongTile from './SongTile';
-import { NAV_BAR_HEIGHT, PLAYER_HEIGHT } from './constants';
+import { NAV_BAR_HEIGHT, PLAYER_HEIGHT } from '../utils/constants';
 
 const { Value, event } = Animated;
 

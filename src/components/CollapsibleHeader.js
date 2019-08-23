@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { NAV_BAR_HEIGHT } from './constants';
-import { withTheme } from './theming';
+import { NAV_BAR_HEIGHT } from '../utils/constants';
+import { withTheme } from '../utils/theming';
 
 const { interpolate, Extrapolate, multiply } = Animated;
 

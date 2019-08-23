@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import { runLinearTiming } from './utils';
-import { withTheme } from './theming';
-import iconHeart from '../assets/icon_heart.png';
+import { runLinearTiming } from '../utils/utils';
+import { withTheme } from '../utils/theming';
+import iconHeart from '../../assets/icon_heart.png';
 
 const { Clock, Value } = Animated;
 

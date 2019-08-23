@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Home from './src/Home';
-import { ThemeProvider } from './src/theming';
+import Login from './src/screens/Login';
+import { ThemeProvider } from './src/utils/theming';
 
 const App = () => (
   <ThemeProvider>
-    <Home />
+    <Login />
   </ThemeProvider>
 );
 

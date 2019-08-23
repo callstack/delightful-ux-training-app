@@ -1,6 +1,7 @@
 import { createTheming } from '@callstack/react-theme-provider';
 
 const darkTheme = {
+  name: 'dark',
   backgroundColor: '#131313',
   secondaryBackgroundColor: '#0c0c0c',
   primaryTextColor: '#FFF',
@@ -9,6 +10,7 @@ const darkTheme = {
 };
 
 const lightTheme = {
+  name: 'light',
   backgroundColor: '#FFF',
   secondaryBackgroundColor: '#f5f9ff',
   primaryTextColor: '#131313',

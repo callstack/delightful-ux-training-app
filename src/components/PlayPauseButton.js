@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated from 'react-native-reanimated';
-import { runLinearTiming } from './utils';
-import { withTheme } from './theming';
+
+import { runLinearTiming } from '../utils/utils';
+import { withTheme } from '../utils/theming';
 
 const { Clock, block, concat, interpolate } = Animated;
 

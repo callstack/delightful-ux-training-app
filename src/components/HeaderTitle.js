@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import { withTheme } from './theming';
+import { withTheme } from '../utils/theming';
 
 const { interpolate, Extrapolate } = Animated;
 
