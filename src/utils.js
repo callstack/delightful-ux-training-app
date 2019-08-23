@@ -7,13 +7,19 @@ const {
   clockRunning,
   timing,
   stopClock,
+  block,
 } = Animated;
 
-export function runLinearTiming(clock, position, toValue, duration = 200) {
+export function runLinearTiming(
+  clock,
+  toValue,
+  progress = new Value(0),
+  duration = 200
+) {
   const state = {
     finished: new Value(0),
     frameTime: new Value(0),
-    position: position,
+    position: progress,
     time: new Value(0),
   };
 
@@ -23,11 +29,10 @@ export function runLinearTiming(clock, position, toValue, duration = 200) {
     easing: Easing.linear,
   };
 
-  return [
+  return block([
     cond(clockRunning(clock), 0, [
       set(state.finished, 0),
       set(state.time, 0),
-      set(state.position, position),
       set(state.frameTime, 0),
       set(config.toValue, toValue),
       startClock(clock),
@@ -35,5 +40,5 @@ export function runLinearTiming(clock, position, toValue, duration = 200) {
     timing(clock, state, config),
     cond(state.finished, stopClock(clock)),
     state.position,
-  ];
+  ]);
 }

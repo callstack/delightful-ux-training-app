@@ -78,8 +78,8 @@ class Player extends React.PureComponent {
                 eq(this.playingState, 1),
                 runLinearTiming(
                   this.progressBarClock,
-                  this.progressBarPosition,
                   this.maxProgressBarPosition,
+                  this.progressBarPosition,
                   multiply(
                     divide(
                       sub(

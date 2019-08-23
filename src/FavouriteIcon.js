@@ -6,17 +6,20 @@ import { runLinearTiming } from './utils';
 import { withTheme } from './theming';
 import iconHeart from '../assets/icon_heart.png';
 
-const { Clock, Value, block } = Animated;
+const { Clock, Value } = Animated;
 
 class FavouriteIcon extends React.Component {
   clock = new Clock();
-  progress = new Value(this.props.checked ? 1 : 0.2);
-  animation = new Value(this.props.checked ? 1 : 0.2);
-  color = block([runLinearTiming(this.clock, this.progress, this.animation)]);
+  toValue = new Value(this.props.checked ? 1 : 0.2);
+  opacity = runLinearTiming(
+    this.clock,
+    this.toValue,
+    new Value(this.props.checked ? 1 : 0.2)
+  );
 
   componentDidUpdate(prevProps) {
     if (prevProps.checked !== this.props.checked) {
-      this.animation.setValue(this.props.checked ? 1 : 0.2);
+      this.toValue.setValue(this.props.checked ? 1 : 0.2);
     }
   }
 
@@ -28,7 +31,7 @@ class FavouriteIcon extends React.Component {
       >
         <Animated.View
           style={{
-            opacity: this.color,
+            opacity: this.opacity,
           }}
         >
           <Animated.Image
