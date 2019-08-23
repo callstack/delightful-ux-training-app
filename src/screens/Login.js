@@ -11,11 +11,21 @@ import {
   Switch,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
 
-import SongList from '../components/SongList';
-import Player from '../components/Player';
 import { withTheme } from '../utils/theming';
-import songs from '../../assets/topTracks.json';
+import { en, pl } from '../utils/translations';
+
+i18n.defaultLocale = 'en';
+i18n.fallbacks = true;
+
+i18n.translations = {
+  en: en,
+  pl: pl,
+};
+
+i18n.locale = Localization.locale;
 
 class Login extends React.Component {
   state = {
@@ -46,10 +56,10 @@ class Login extends React.Component {
           <Text
             style={computedStyles.header}
             accessible={true}
-            accessibilityLabel="Nice to see you!"
+            accessibilityLabel={i18n.t('header')}
             accessibilityRole="text"
           >
-            Nice to see you!
+            {i18n.t('header')}
           </Text>
           <View style={computedStyles.inputGroup}>
             <View style={[computedStyles.row, computedStyles.inputRow]}>
@@ -63,13 +73,13 @@ class Login extends React.Component {
                 onChangeText={this.setEmail}
                 onFocus={this.activateEmail}
                 value={this.state.loginValue}
-                placeholder="e-mail"
+                placeholder={i18n.t('email')}
                 autoCapitalize="none"
                 keyboardType="email-address"
                 placeholderTextColor={theme.secondaryTextColor}
                 accessible={true}
-                accessibilityLabel="e-mail"
-                accessibilityHint="Input for your account e-mail address"
+                accessibilityLabel={i18n.t('email')}
+                accessibilityHint={i18n.t('email_hint')}
               />
             </View>
             <View style={[computedStyles.row, computedStyles.inputRow]}>
@@ -85,12 +95,12 @@ class Login extends React.Component {
                 value={this.state.passwordValue}
                 secureTextEntry
                 returnKeyType="go"
-                placeholder="password"
+                placeholder={i18n.t('password')}
                 autoCapitalize="none"
                 placeholderTextColor={theme.secondaryTextColor}
                 accessible={true}
-                accessibilityLabel="password"
-                accessibilityHint="Input for your account password"
+                accessibilityLabel={i18n.t('password')}
+                accessibilityHint={i18n.t('password_hint')}
               />
             </View>
             <View style={computedStyles.row}>
@@ -103,27 +113,27 @@ class Login extends React.Component {
                   true: theme.accentColor,
                 }}
                 accessible={true}
-                accessibilityLabel="Remember me"
-                accessibilityHint="Toggle to remember e-mail and password"
+                accessibilityLabel={i18n.t('remember_me')}
+                accessibilityHint={i18n.t('remember_me_hint')}
               />
               <Text
                 style={computedStyles.toggleLabel}
                 accessibilityElementsHidden={true}
                 importantForAccessibility="no"
               >
-                Remember me
+                {i18n.t('remember_me')}
               </Text>
             </View>
           </View>
           <TouchableHighlight
             style={computedStyles.button}
             accessible={true}
-            accessibilityLabel="Login"
-            accessibilityHint="Press to login"
+            accessibilityLabel={i18n.t('login')}
+            accessibilityHint={i18n.t('login_hint')}
             accessibilityRole="button"
           >
             <View style={computedStyles.row}>
-              <Text style={computedStyles.buttonText}>Login</Text>
+              <Text style={computedStyles.buttonText}>{i18n.t('login')}</Text>
               <Ionicons
                 name="md-arrow-forward"
                 size={16}
