@@ -5,7 +5,7 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 import PlayPauseButton from './PlayPauseButton';
 import { PLAYER_HEIGHT } from '../utils/constants';
-import { runLinearTiming } from '../utils/utils';
+import { runLinearTiming } from '../utils/animationHelpers';
 import { withTheme } from '../utils/theming';
 
 const {
@@ -76,11 +76,11 @@ class Player extends React.PureComponent {
               // progressbar animation
               cond(
                 eq(this.playingState, 1),
-                runLinearTiming(
-                  this.progressBarClock,
-                  this.maxProgressBarPosition,
-                  this.progressBarPosition,
-                  multiply(
+                runLinearTiming({
+                  clock: this.progressBarClock,
+                  toValue: this.maxProgressBarPosition,
+                  position: this.progressBarPosition,
+                  duration: multiply(
                     divide(
                       sub(
                         this.maxProgressBarPosition,
@@ -89,8 +89,8 @@ class Player extends React.PureComponent {
                       this.maxProgressBarPosition
                     ),
                     this.props.duration * 1000
-                  )
-                ),
+                  ),
+                }),
                 [
                   stopClock(this.progressBarClock),
                   set(
