@@ -1,135 +1,38 @@
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import Animated, { Easing } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 
 import FavouriteIcon from './FavouriteIcon';
 import SmallSongImage from './SmallSongImage';
 import { ROW_HEIGHT } from '../utils/constants';
 import { withTheme } from '../utils/theming';
+import {
+  runLinearTiming,
+  runSpring,
+  runSwipeDecay,
+} from '../utils/animationHelpers';
 
 const {
   Value,
   interpolate,
   Extrapolate,
   Clock,
-  timing,
   cond,
-  clockRunning,
-  set,
-  startClock,
   stopClock,
-  spring,
-  decay,
   event,
-  add,
-  sub,
-  defined,
   eq,
   greaterThan,
-  call,
-  and,
   neq,
 } = Animated;
-
-// Inertial slide animation - decay
-function runSwipeDecay(value, velocity) {
-  const state = {
-    finished: new Value(0),
-    velocity: new Value(0),
-    position: new Value(0),
-    time: new Value(0),
-  };
-
-  const config = {
-    deceleration: new Value(0.995),
-  };
-
-  const clock = new Clock();
-
-  return [
-    cond(clockRunning(clock), 0, [
-      set(state.finished, 0),
-      set(state.velocity, velocity),
-      set(state.position, value),
-      set(config.deceleration, 0.99),
-      startClock(clock),
-    ]),
-    decay(clock, state, config),
-    cond(state.finished, [stopClock(clock)]),
-    state.position,
-  ];
-}
-
-// Hiding animation - going with row height to 0
-function runHideTiming(clock, height, callback) {
-  const state = {
-    finished: new Value(0),
-    frameTime: new Value(0),
-    position: height,
-    time: new Value(0),
-  };
-
-  const config = {
-    toValue: new Value(0),
-    duration: new Value(300),
-    easing: Easing.inOut(Easing.cubic),
-  };
-
-  return [
-    cond(clockRunning(clock), 0, [
-      set(state.finished, 0),
-      set(state.time, 0),
-      set(state.position, height),
-      set(state.frameTime, 0),
-      set(config.toValue, 0),
-      startClock(clock),
-    ]),
-    timing(clock, state, config),
-    cond(state.finished, [stopClock(clock), call([state.finished], callback)]),
-    state.position,
-  ];
-}
-
-// Returning to the initial position animation
-function runSpring(clock, position, velocity) {
-  const state = {
-    finished: new Value(0),
-    velocity: new Value(0),
-    position: new Value(0),
-    time: new Value(0),
-  };
-
-  const config = {
-    damping: 50,
-    mass: 1,
-    stiffness: 121.6,
-    overshootClamping: false,
-    restSpeedThreshold: 0.001,
-    restDisplacementThreshold: 0.001,
-    toValue: new Value(0),
-  };
-
-  return [
-    cond(clockRunning(clock), 0, [
-      set(state.finished, 0),
-      set(state.velocity, velocity),
-      set(state.position, position),
-      startClock(clock),
-    ]),
-    spring(clock, state, config),
-    cond(state.finished, [stopClock(clock)]),
-    state.position,
-  ];
-}
 
 class SongTile extends React.Component {
   constructor(props) {
     super(props);
 
     const dragX = new Value(0);
-    this.gestureState = new Value(-1);
     const dragVX = new Value(0);
+    this.gestureState = new Value(-1);
 
     this.onGestureEvent = event([
       {
@@ -141,38 +44,26 @@ class SongTile extends React.Component {
       },
     ]);
 
-    const transX = new Value(0);
-    const prevDragX = new Value(0);
-
     const clock = new Clock();
 
     this.height = new Value(ROW_HEIGHT);
-    this.handlerRef = React.createRef();
 
     this.translateX = cond(
       eq(this.gestureState, State.ACTIVE),
+      [stopClock(clock), dragX],
       [
-        stopClock(clock),
-        set(transX, add(transX, sub(dragX, prevDragX))),
-        set(prevDragX, dragX),
-      ],
-      [
-        set(prevDragX, 0),
         cond(
-          greaterThan(transX, 80),
-          cond(
-            defined(transX),
-            [
-              runHideTiming(clock, this.height, this.handleHideEnd),
-              runSwipeDecay(transX, dragVX),
-            ],
-            0
-          ),
-          cond(
-            and(defined(transX), neq(dragX, 0)),
-            runSpring(clock, transX, dragVX),
-            0
-          )
+          greaterThan(dragX, 80),
+          [
+            runLinearTiming({
+              clock,
+              toValue: new Value(0),
+              position: this.height,
+              callback: this.handleHideEnd,
+            }),
+            runSwipeDecay(dragX, dragVX),
+          ],
+          cond(neq(dragX, 0), runSpring(clock, dragX), 0)
         ),
       ]
     );
@@ -232,7 +123,6 @@ class SongTile extends React.Component {
                   tapEnabled={this.gestureState !== State.ACTIVE}
                   onToggle={() => this.props.onSongFavouriteToggle(track.id)}
                   checked={this.props.item.isFavourite}
-                  handlerRef={this.handlerRef}
                 />
               </View>
             </Animated.View>

@@ -3,14 +3,16 @@ import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated from 'react-native-reanimated';
 
-import { runLinearTiming } from '../utils/utils';
+import { runLinearTiming } from '../utils/animationHelpers';
 import { withTheme } from '../utils/theming';
 
 const { Clock, block, concat, interpolate } = Animated;
 
 class PlayPauseButton extends React.Component {
   clock = new Clock();
-  pauseOpacity = block([runLinearTiming(this.clock, this.props.isPlaying)]);
+  pauseOpacity = block([
+    runLinearTiming({ clock: this.clock, toValue: this.props.isPlaying }),
+  ]);
 
   playOpacity = interpolate(this.pauseOpacity, {
     inputRange: [0, 1],

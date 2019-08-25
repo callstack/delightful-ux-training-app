@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import { runLinearTiming } from '../utils/utils';
+import { runLinearTiming } from '../utils/animationHelpers';
 import { withTheme } from '../utils/theming';
 import iconHeart from '../../assets/icon_heart.png';
 
@@ -10,12 +10,12 @@ const { Clock, Value } = Animated;
 
 class FavouriteIcon extends React.Component {
   clock = new Clock();
-  toValue = new Value(this.props.checked ? 1 : 0.2);
-  opacity = runLinearTiming(
-    this.clock,
-    this.toValue,
-    new Value(this.props.checked ? 1 : 0.2)
-  );
+  toValue = new Value(0.2);
+  opacity = runLinearTiming({
+    clock: this.clock,
+    toValue: this.toValue,
+    position: new Value(0.2),
+  });
 
   componentDidUpdate(prevProps) {
     if (prevProps.checked !== this.props.checked) {
@@ -51,6 +51,5 @@ const style = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
-    // tintColor: 'white',
   },
 });
