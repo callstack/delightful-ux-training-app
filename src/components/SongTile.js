@@ -205,7 +205,7 @@ class SongTile extends React.Component {
           <PanGestureHandler
             onGestureEvent={this.onGestureEvent}
             onHandlerStateChange={this.onGestureEvent}
-            maxPointers={1}
+            maxPointers={1} // todo: remove this prop
             minDeltaX={10}
           >
             <Animated.View

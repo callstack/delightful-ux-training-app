@@ -1,13 +1,11 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-export default class SmallSongImage extends React.Component {
-  render() {
-    const { style, uri } = this.props;
+const  SmallSongImage ({uri}) => (
+     <Image style={styles.image} source={{ uri }} />;
+)
 
-    return <Image style={[styles.image, style]} source={{ uri: uri }} />;
-  }
-}
+export default SmallSongImage
 
 const styles = StyleSheet.create({
   image: {
