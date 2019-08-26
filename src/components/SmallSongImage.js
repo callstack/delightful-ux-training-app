@@ -1,11 +1,11 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-const  SmallSongImage ({uri}) => (
-     <Image style={styles.image} source={{ uri }} />;
-)
+const SmallSongImage = ({ uri }) => (
+  <Image style={styles.image} source={{ uri }} />
+);
 
-export default SmallSongImage
+export default SmallSongImage;
 
 const styles = StyleSheet.create({
   image: {

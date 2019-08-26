@@ -37,7 +37,7 @@ class SongTile extends React.Component {
     this.onGestureEvent = event([
       {
         nativeEvent: {
-          translationX: x => set(dragX, cond(greaterThan(x, 0), x, 0)),
+          translationX: dragX,
           velocityX: dragVX,
           state: this.gestureState,
         },
@@ -96,8 +96,8 @@ class SongTile extends React.Component {
           <PanGestureHandler
             onGestureEvent={this.onGestureEvent}
             onHandlerStateChange={this.onGestureEvent}
-            maxPointers={1} // todo: remove this prop
-            minDeltaX={10}
+            maxPointers={1}
+            activeOffsetX={10}
           >
             <Animated.View
               style={[
