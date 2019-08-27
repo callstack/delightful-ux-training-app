@@ -55,7 +55,7 @@ class Login extends React.Component {
     const { theme, toggleLoginScreen } = this.props;
     const computedStyles = styles(theme);
     return (
-      <SafeAreaView style={[computedStyles.outerContainer, this.props.styles]}>
+      <SafeAreaView style={computedStyles.outerContainer}>
         <View style={computedStyles.container}>
           <ScreensToggleIcon
             color={theme.primaryTextColor}
