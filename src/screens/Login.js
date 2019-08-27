@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   StyleSheet,
-  SafeAreaView,
   Platform,
   StatusBar,
   Text,
@@ -55,102 +54,100 @@ class Login extends React.Component {
     const { theme, toggleLoginScreen } = this.props;
     const computedStyles = styles(theme);
     return (
-      <SafeAreaView style={computedStyles.outerContainer}>
-        <View style={computedStyles.container}>
-          <ScreensToggleIcon
-            color={theme.primaryTextColor}
-            toggleLoginScreen={toggleLoginScreen}
-            shouldClose
-          />
-          <StatusBar
-            barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
-          />
-          <Text
-            style={computedStyles.header}
-            accessibilityLabel={i18n.t('header')}
-            accessibilityRole="text"
-          >
-            {i18n.t('header')}
-          </Text>
-          <View style={computedStyles.inputGroup}>
-            <View style={[computedStyles.row, computedStyles.inputRow]}>
-              <Ionicons
-                name="md-person"
-                size={26}
-                color={theme.primaryTextColor}
-                accessibilityElementsHidden={true}
-                importantForAccessibility="no"
-              />
-              <TextInput
-                style={computedStyles.input}
-                onChangeText={this.setEmail}
-                value={this.state.loginValue}
-                autoCapitalize="none"
-                keyboardType="email-address"
-                placeholder={i18n.t('email')}
-                placeholderTextColor={theme.secondaryTextColor}
-                accessibilityLabel={i18n.t('email')}
-                accessibilityHint={i18n.t('email_hint')}
-              />
-            </View>
-            <View style={[computedStyles.row, computedStyles.inputRow]}>
-              <Ionicons
-                name="md-lock"
-                size={26}
-                color={theme.primaryTextColor}
-                accessibilityElementsHidden={true}
-                importantForAccessibility="no"
-              />
-              <TextInput
-                style={computedStyles.input}
-                onChangeText={this.setPassword}
-                value={this.state.passwordValue}
-                returnKeyType="go"
-                autoCapitalize="none"
-                placeholder={i18n.t('password')}
-                placeholderTextColor={theme.secondaryTextColor}
-                accessibilityLabel={i18n.t('password')}
-                accessibilityHint={i18n.t('password_hint')}
-                secureTextEntry
-              />
-            </View>
-            <View style={computedStyles.row}>
-              <Switch
-                value={this.state.rememberPasswordchecked}
-                onValueChange={this.toggleSwitch}
-                trackColor={{
-                  false: theme.secondaryBackgroundColor,
-                  true: theme.accentColor,
-                }}
-                accessibilityLabel={i18n.t('remember_me')}
-                accessibilityHint={i18n.t('remember_me_hint')}
-              />
-              <Text
-                style={computedStyles.toggleLabel}
-                accessibilityElementsHidden={true}
-                importantForAccessibility="no"
-              >
-                {i18n.t('remember_me')}
-              </Text>
-            </View>
+      <View style={computedStyles.container}>
+        <ScreensToggleIcon
+          color={theme.primaryTextColor}
+          toggleLoginScreen={toggleLoginScreen}
+          shouldClose
+        />
+        <StatusBar
+          barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
+        />
+        <Text
+          style={computedStyles.header}
+          accessibilityLabel={i18n.t('header')}
+          accessibilityRole="text"
+        >
+          {i18n.t('header')}
+        </Text>
+        <View style={computedStyles.inputGroup}>
+          <View style={[computedStyles.row, computedStyles.inputRow]}>
+            <Ionicons
+              name="md-person"
+              size={26}
+              color={theme.primaryTextColor}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            />
+            <TextInput
+              style={computedStyles.input}
+              onChangeText={this.setEmail}
+              value={this.state.loginValue}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholder={i18n.t('email')}
+              placeholderTextColor={theme.secondaryTextColor}
+              accessibilityLabel={i18n.t('email')}
+              accessibilityHint={i18n.t('email_hint')}
+            />
           </View>
-          <TouchableHighlight
-            style={computedStyles.button}
-            accessibilityLabel={i18n.t('login')}
-            accessibilityHint={i18n.t('login_hint')}
-            accessibilityRole="button"
-          >
-            <View style={computedStyles.row}>
-              <Text style={computedStyles.buttonText}>{i18n.t('login')}</Text>
-              <Ionicons
-                name="md-arrow-forward"
-                size={16}
-                color={theme.backgroundColor}
-              />
-            </View>
-          </TouchableHighlight>
+          <View style={[computedStyles.row, computedStyles.inputRow]}>
+            <Ionicons
+              name="md-lock"
+              size={26}
+              color={theme.primaryTextColor}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            />
+            <TextInput
+              style={computedStyles.input}
+              onChangeText={this.setPassword}
+              value={this.state.passwordValue}
+              returnKeyType="go"
+              autoCapitalize="none"
+              placeholder={i18n.t('password')}
+              placeholderTextColor={theme.secondaryTextColor}
+              accessibilityLabel={i18n.t('password')}
+              accessibilityHint={i18n.t('password_hint')}
+              secureTextEntry
+            />
+          </View>
+          <View style={computedStyles.row}>
+            <Switch
+              value={this.state.rememberPasswordchecked}
+              onValueChange={this.toggleSwitch}
+              trackColor={{
+                false: theme.secondaryBackgroundColor,
+                true: theme.accentColor,
+              }}
+              accessibilityLabel={i18n.t('remember_me')}
+              accessibilityHint={i18n.t('remember_me_hint')}
+            />
+            <Text
+              style={computedStyles.toggleLabel}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            >
+              {i18n.t('remember_me')}
+            </Text>
+          </View>
         </View>
-      </SafeAreaView>
+        <TouchableHighlight
+          style={computedStyles.button}
+          accessibilityLabel={i18n.t('login')}
+          accessibilityHint={i18n.t('login_hint')}
+          accessibilityRole="button"
+        >
+          <View style={computedStyles.row}>
+            <Text style={computedStyles.buttonText}>{i18n.t('login')}</Text>
+            <Ionicons
+              name="md-arrow-forward"
+              size={16}
+              color={theme.backgroundColor}
+            />
+          </View>
+        </TouchableHighlight>
+      </View>
     );
   }
 }
@@ -159,21 +156,20 @@ export default withTheme(Login);
 
 const styles = theme => {
   let themeObj = {
-    outerContainer: {
-      backgroundColor: theme.backgroundColor,
+    container: {
       position: 'absolute',
       top: 0,
       right: 0,
       bottom: 0,
       left: 0,
       zIndex: 999999,
-    },
-    container: {
-      flex: 1,
       paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
       alignItems: 'center',
       justifyContent: 'center',
       paddingHorizontal: 10,
+      backgroundColor: theme.backgroundColor,
+      // trick for correct zIndex on android
+      elevation: 18,
     },
     header: {
       fontSize: 20,
