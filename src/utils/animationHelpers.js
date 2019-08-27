@@ -9,9 +9,9 @@ const {
   stopClock,
   block,
   call,
-  Clock,
   decay,
   spring,
+  SpringUtils,
 } = Animated;
 
 export function runLinearTiming({
@@ -49,19 +49,17 @@ export function runLinearTiming({
 }
 
 // SongItem - Inertial slide animation (decay)
-export function runSwipeDecay(value, velocity) {
+export function runSwipeDecay(clock, value, velocity) {
   const state = {
     finished: new Value(0),
-    velocity: new Value(0),
-    position: new Value(0),
+    velocity: velocity,
+    position: value,
     time: new Value(0),
   };
 
   const config = {
-    deceleration: new Value(0.995),
+    deceleration: new Value(0.99),
   };
-
-  const clock = new Clock();
 
   return [
     cond(clockRunning(clock), 0, [
@@ -86,14 +84,7 @@ export function runSpring(clock, position) {
     time: new Value(0),
   };
 
-  const config = {
-    damping: 50,
-    mass: 1,
-    stiffness: 100,
-    restSpeedThreshold: 0.001,
-    restDisplacementThreshold: 0.001,
-    toValue: new Value(0),
-  };
+  const config = SpringUtils.makeDefaultConfig();
 
   return [
     cond(clockRunning(clock), 0, [
