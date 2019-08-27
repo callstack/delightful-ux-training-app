@@ -49,13 +49,12 @@ class Login extends React.Component {
 
     return (
       <SafeAreaView style={computedStyles.outerContainer}>
+        <StatusBar
+          barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
+        />
         <View style={computedStyles.container}>
-          <StatusBar
-            barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
-          />
           <Text
             style={computedStyles.header}
-            accessible={true}
             accessibilityLabel={i18n.t('header')}
             accessibilityRole="text"
           >
@@ -67,17 +66,17 @@ class Login extends React.Component {
                 name="md-person"
                 size={26}
                 color={theme.primaryTextColor}
+                accessibilityElementsHidden={true}
+                importantForAccessibility="no"
               />
               <TextInput
                 style={computedStyles.input}
                 onChangeText={this.setEmail}
-                onFocus={this.activateEmail}
                 value={this.state.loginValue}
-                placeholder={i18n.t('email')}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                placeholder={i18n.t('email')}
                 placeholderTextColor={theme.secondaryTextColor}
-                accessible={true}
                 accessibilityLabel={i18n.t('email')}
                 accessibilityHint={i18n.t('email_hint')}
               />
@@ -87,32 +86,30 @@ class Login extends React.Component {
                 name="md-lock"
                 size={26}
                 color={theme.primaryTextColor}
+                accessibilityElementsHidden={true}
+                importantForAccessibility="no"
               />
               <TextInput
                 style={computedStyles.input}
                 onChangeText={this.setPassword}
-                onFocus={this.activatePassword}
                 value={this.state.passwordValue}
-                secureTextEntry
                 returnKeyType="go"
-                placeholder={i18n.t('password')}
                 autoCapitalize="none"
+                placeholder={i18n.t('password')}
                 placeholderTextColor={theme.secondaryTextColor}
-                accessible={true}
                 accessibilityLabel={i18n.t('password')}
                 accessibilityHint={i18n.t('password_hint')}
+                secureTextEntry
               />
             </View>
             <View style={computedStyles.row}>
               <Switch
                 value={this.state.rememberPasswordchecked}
                 onValueChange={this.toggleSwitch}
-                onTouchStart={this.activateSwitch}
                 trackColor={{
                   false: theme.secondaryBackgroundColor,
                   true: theme.accentColor,
                 }}
-                accessible={true}
                 accessibilityLabel={i18n.t('remember_me')}
                 accessibilityHint={i18n.t('remember_me_hint')}
               />
@@ -127,7 +124,6 @@ class Login extends React.Component {
           </View>
           <TouchableHighlight
             style={computedStyles.button}
-            accessible={true}
             accessibilityLabel={i18n.t('login')}
             accessibilityHint={i18n.t('login_hint')}
             accessibilityRole="button"
