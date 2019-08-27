@@ -9,13 +9,14 @@ import {
   TouchableHighlight,
   View,
   Switch,
+  I18nManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 
 import { withTheme } from '../utils/theming';
-import { en, pl } from '../utils/translations';
+import { en, pl, ar } from '../utils/translations';
 
 i18n.defaultLocale = 'en';
 i18n.fallbacks = true;
@@ -23,9 +24,15 @@ i18n.fallbacks = true;
 i18n.translations = {
   en: en,
   pl: pl,
+  ar: ar,
 };
 
-i18n.locale = Localization.locale;
+const currentLocale = Localization.locale;
+i18n.locale = currentLocale;
+
+const isRTL = currentLocale.indexOf('ar') === 0;
+I18nManager.allowRTL = isRTL;
+I18nManager.forceRTL(isRTL);
 
 class Login extends React.Component {
   state = {
@@ -46,7 +53,6 @@ class Login extends React.Component {
   render() {
     const { theme } = this.props;
     const computedStyles = styles(theme);
-
     return (
       <SafeAreaView style={computedStyles.outerContainer}>
         <StatusBar
@@ -184,6 +190,7 @@ const styles = theme =>
       fontSize: 16,
       color: theme.primaryTextColor,
       paddingVertical: 10,
+      textAlign: isRTL ? 'right' : 'left',
     },
     button: {
       backgroundColor: theme.accentColor,
