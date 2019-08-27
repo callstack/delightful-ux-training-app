@@ -23,7 +23,6 @@ const {
   event,
   eq,
   greaterThan,
-  neq,
 } = Animated;
 
 class SongTile extends React.Component {
@@ -45,12 +44,14 @@ class SongTile extends React.Component {
     ]);
 
     const clock = new Clock();
+    const swipeClock = new Clock();
+    const springClock = new Clock();
 
     this.height = new Value(ROW_HEIGHT);
 
     this.translateX = cond(
       eq(this.gestureState, State.ACTIVE),
-      [stopClock(clock), dragX],
+      [stopClock(clock), stopClock(swipeClock), stopClock(springClock), dragX],
       [
         cond(
           greaterThan(dragX, 80),
@@ -61,9 +62,9 @@ class SongTile extends React.Component {
               position: this.height,
               callback: this.handleHideEnd,
             }),
-            runSwipeDecay(dragX, dragVX),
+            runSwipeDecay(swipeClock, dragX, dragVX),
           ],
-          cond(neq(dragX, 0), runSpring(clock, dragX), 0)
+          runSpring(springClock, dragX)
         ),
       ]
     );

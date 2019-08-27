@@ -76,10 +76,9 @@ class Home extends React.Component {
             songs={this.state.songs}
             currentSong={this.state.currentSong}
           />
-          <Login
-            styles={{ display: this.state.showLoginScreen ? 'block' : 'none' }}
-            toggleLoginScreen={this.toggleLoginScreen}
-          />
+          {this.state.showLoginScreen && (
+            <Login toggleLoginScreen={this.toggleLoginScreen} />
+          )}
         </View>
       </SafeAreaView>
     );
