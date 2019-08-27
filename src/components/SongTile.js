@@ -135,8 +135,8 @@ class SongTile extends React.Component {
 
 export default withTheme(SongTile);
 
-const styles = theme =>
-  StyleSheet.create({
+const styles = theme => {
+  let themeObj = {
     container: {
       overflow: 'hidden',
     },
@@ -164,4 +164,6 @@ const styles = theme =>
     subtitleText: {
       color: theme.secondaryTextColor,
     },
-  });
+  };
+  return StyleSheet.create(themeObj);
+};

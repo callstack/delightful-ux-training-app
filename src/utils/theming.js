@@ -1,13 +1,13 @@
 import { createTheming } from '@callstack/react-theme-provider';
 
-const darkTheme = {
-  name: 'dark',
-  backgroundColor: '#131313',
-  secondaryBackgroundColor: '#0c0c0c',
-  primaryTextColor: '#FFF',
-  secondaryTextColor: '#757575',
-  accentColor: '#F8F32B',
-};
+// const darkTheme = {
+//   name: 'dark',
+//   backgroundColor: '#131313',
+//   secondaryBackgroundColor: '#0c0c0c',
+//   primaryTextColor: '#FFF',
+//   secondaryTextColor: '#757575',
+//   accentColor: '#F8F32B',
+// };
 
 const lightTheme = {
   name: 'light',

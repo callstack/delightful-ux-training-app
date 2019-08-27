@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import CollapsibleHeader from './CollapsibleHeader';
@@ -32,7 +32,7 @@ function SongList({
   };
 
   return (
-    <View>
+    <React.Fragment>
       <CollapsibleHeader scrollY={scrollY} currentSong={currentSong} />
 
       <AnimatedFlatList
@@ -55,7 +55,7 @@ function SongList({
 
       {/* We need it here because it should be over the list */}
       <HeaderTitle scrollY={scrollY} currentSong={currentSong} />
-    </View>
+    </React.Fragment>
   );
 }
 

@@ -45,6 +45,15 @@ class Player extends React.PureComponent {
   state = new Value(-1);
   prevDragX = new Value(0);
 
+  _onGestureEvent = event([
+    {
+      nativeEvent: {
+        translationX: this.dragX,
+        state: this.state,
+      },
+    },
+  ]);
+
   componentDidUpdate(prevProps) {
     if (this.props.currentSong !== prevProps.currentSong) {
       this.playingState.setValue(0);
@@ -57,19 +66,10 @@ class Player extends React.PureComponent {
   };
 
   render() {
-    this._onGestureEvent = event([
-      {
-        nativeEvent: {
-          translationX: this.dragX,
-          state: this.state,
-        },
-      },
-    ]);
-
-    const cumputedStyles = styles(this.props.theme);
+    const computedStyles = styles(this.props.theme);
 
     return (
-      <View style={cumputedStyles.container}>
+      <View style={computedStyles.container}>
         <Animated.Code key={this.props.currentSong}>
           {() =>
             block([
@@ -128,23 +128,23 @@ class Player extends React.PureComponent {
             ])
           }
         </Animated.Code>
-        <View style={cumputedStyles.content}>
-          <View style={cumputedStyles.textContainer}>
-            <Text style={cumputedStyles.title}>
+        <View style={computedStyles.content}>
+          <View style={computedStyles.textContainer}>
+            <Text style={computedStyles.title}>
               {this.props.currentSong.track.name}
             </Text>
-            <Text style={cumputedStyles.subTitle}>
+            <Text style={computedStyles.subTitle}>
               {this.props.currentSong.track.album.name}
             </Text>
           </View>
-          <View style={cumputedStyles.controls}>
+          <View style={computedStyles.controls}>
             <PlayPauseButton
               onPress={this.togglePlay}
               isPlaying={this.playingState}
             />
           </View>
         </View>
-        <View style={[cumputedStyles.progressBar]}>
+        <View style={[computedStyles.progressBar]}>
           <PanGestureHandler
             maxPointers={1}
             onGestureEvent={this._onGestureEvent}
@@ -152,7 +152,7 @@ class Player extends React.PureComponent {
           >
             <Animated.View
               style={[
-                cumputedStyles.progressIndicator,
+                computedStyles.progressIndicator,
                 {
                   transform: [{ translateX: this.progressBarPosition }],
                 },
@@ -168,8 +168,8 @@ class Player extends React.PureComponent {
 
 export default withTheme(Player);
 
-const styles = theme =>
-  StyleSheet.create({
+const styles = theme => {
+  let themeObj = {
     container: {
       height: PLAYER_HEIGHT,
       alignItems: 'stretch',
@@ -227,4 +227,6 @@ const styles = theme =>
       borderRadius: 5,
       backgroundColor: theme.accentColor,
     },
-  });
+  };
+  return StyleSheet.create(themeObj);
+};

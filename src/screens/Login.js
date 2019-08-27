@@ -157,8 +157,8 @@ class Login extends React.Component {
 
 export default withTheme(Login);
 
-const styles = theme =>
-  StyleSheet.create({
+const styles = theme => {
+  let themeObj = {
     outerContainer: {
       backgroundColor: theme.backgroundColor,
       position: 'absolute',
@@ -217,4 +217,6 @@ const styles = theme =>
     toggleLabel: {
       marginLeft: 10,
     },
-  });
+  };
+  return StyleSheet.create(themeObj);
+};

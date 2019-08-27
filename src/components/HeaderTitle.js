@@ -14,8 +14,8 @@ class HeaderTitle extends React.Component {
   });
 
   render() {
-    const { currentSong } = this.props;
-    const computedStyles = styles(this.props.theme);
+    const { currentSong, theme } = this.props;
+    const computedStyles = styles(theme);
 
     return (
       <Animated.View
@@ -36,8 +36,8 @@ class HeaderTitle extends React.Component {
 
 export default withTheme(HeaderTitle);
 
-const styles = theme =>
-  StyleSheet.create({
+const styles = theme => {
+  let themeObj = {
     container: {
       position: 'absolute',
       top: 0,
@@ -54,4 +54,6 @@ const styles = theme =>
       color: theme.primaryTextColor,
       fontSize: 15,
     },
-  });
+  };
+  return StyleSheet.create(themeObj);
+};

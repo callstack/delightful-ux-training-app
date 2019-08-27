@@ -26,8 +26,8 @@ class CollapsibleHeader extends React.Component {
   });
 
   render() {
-    const { currentSong } = this.props;
-    const computedStyles = styles(this.props.theme);
+    const { currentSong, theme } = this.props;
+    const computedStyles = styles(theme);
     return (
       <View style={computedStyles.container}>
         <Animated.View
@@ -69,8 +69,8 @@ class CollapsibleHeader extends React.Component {
 
 export default withTheme(CollapsibleHeader);
 
-const styles = theme =>
-  StyleSheet.create({
+const styles = theme => {
+  let themeObj = {
     container: {
       position: 'absolute',
       top: 0,
@@ -107,4 +107,6 @@ const styles = theme =>
       height: 150,
       borderRadius: 5,
     },
-  });
+  };
+  return StyleSheet.create(themeObj);
+};
