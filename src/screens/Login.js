@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 
+import ScreensToggleIcon from '../components/ScreensToggleIcon';
 import { withTheme } from '../utils/theming';
 import { en, pl, ar } from '../utils/translations';
 
@@ -51,14 +52,19 @@ class Login extends React.Component {
     }));
 
   render() {
-    const { theme } = this.props;
+    const { theme, toggleLoginScreen } = this.props;
     const computedStyles = styles(theme);
     return (
-      <SafeAreaView style={computedStyles.outerContainer}>
-        <StatusBar
-          barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
-        />
+      <SafeAreaView style={[computedStyles.outerContainer, this.props.styles]}>
         <View style={computedStyles.container}>
+          <ScreensToggleIcon
+            color={theme.primaryTextColor}
+            toggleLoginScreen={toggleLoginScreen}
+            shouldClose
+          />
+          <StatusBar
+            barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
+          />
           <Text
             style={computedStyles.header}
             accessibilityLabel={i18n.t('header')}
@@ -155,7 +161,12 @@ const styles = theme =>
   StyleSheet.create({
     outerContainer: {
       backgroundColor: theme.backgroundColor,
-      flex: 1,
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      zIndex: 999999,
     },
     container: {
       flex: 1,
