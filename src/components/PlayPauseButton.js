@@ -77,8 +77,8 @@ class PlayPauseButton extends React.Component {
 
 export default withTheme(PlayPauseButton);
 
-const styles = theme =>
-  StyleSheet.create({
+const styles = theme => {
+  let themeObj = {
     container: {
       width: 46,
       height: 46,
@@ -96,4 +96,6 @@ const styles = theme =>
     playIcon: {
       marginLeft: 2,
     },
-  });
+  };
+  return StyleSheet.create(themeObj);
+};

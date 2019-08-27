@@ -9,13 +9,15 @@ import {
   TouchableHighlight,
   View,
   Switch,
+  I18nManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 
+import ScreensToggleIcon from '../components/ScreensToggleIcon';
 import { withTheme } from '../utils/theming';
-import { en, pl } from '../utils/translations';
+import { en, pl, ar } from '../utils/translations';
 
 i18n.defaultLocale = 'en';
 i18n.fallbacks = true;
@@ -23,9 +25,15 @@ i18n.fallbacks = true;
 i18n.translations = {
   en: en,
   pl: pl,
+  ar: ar,
 };
 
-i18n.locale = Localization.locale;
+const currentLocale = Localization.locale;
+i18n.locale = currentLocale;
+
+const isRTL = currentLocale.indexOf('ar') === 0;
+I18nManager.allowRTL = isRTL;
+I18nManager.forceRTL(isRTL);
 
 class Login extends React.Component {
   state = {
@@ -44,18 +52,21 @@ class Login extends React.Component {
     }));
 
   render() {
-    const { theme } = this.props;
+    const { theme, toggleLoginScreen } = this.props;
     const computedStyles = styles(theme);
-
     return (
-      <SafeAreaView style={computedStyles.outerContainer}>
+      <SafeAreaView style={[computedStyles.outerContainer, this.props.styles]}>
         <View style={computedStyles.container}>
+          <ScreensToggleIcon
+            color={theme.primaryTextColor}
+            toggleLoginScreen={toggleLoginScreen}
+            shouldClose
+          />
           <StatusBar
             barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
           />
           <Text
             style={computedStyles.header}
-            accessible={true}
             accessibilityLabel={i18n.t('header')}
             accessibilityRole="text"
           >
@@ -67,17 +78,17 @@ class Login extends React.Component {
                 name="md-person"
                 size={26}
                 color={theme.primaryTextColor}
+                accessibilityElementsHidden={true}
+                importantForAccessibility="no"
               />
               <TextInput
                 style={computedStyles.input}
                 onChangeText={this.setEmail}
-                onFocus={this.activateEmail}
                 value={this.state.loginValue}
-                placeholder={i18n.t('email')}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                placeholder={i18n.t('email')}
                 placeholderTextColor={theme.secondaryTextColor}
-                accessible={true}
                 accessibilityLabel={i18n.t('email')}
                 accessibilityHint={i18n.t('email_hint')}
               />
@@ -87,32 +98,30 @@ class Login extends React.Component {
                 name="md-lock"
                 size={26}
                 color={theme.primaryTextColor}
+                accessibilityElementsHidden={true}
+                importantForAccessibility="no"
               />
               <TextInput
                 style={computedStyles.input}
                 onChangeText={this.setPassword}
-                onFocus={this.activatePassword}
                 value={this.state.passwordValue}
-                secureTextEntry
                 returnKeyType="go"
-                placeholder={i18n.t('password')}
                 autoCapitalize="none"
+                placeholder={i18n.t('password')}
                 placeholderTextColor={theme.secondaryTextColor}
-                accessible={true}
                 accessibilityLabel={i18n.t('password')}
                 accessibilityHint={i18n.t('password_hint')}
+                secureTextEntry
               />
             </View>
             <View style={computedStyles.row}>
               <Switch
                 value={this.state.rememberPasswordchecked}
                 onValueChange={this.toggleSwitch}
-                onTouchStart={this.activateSwitch}
                 trackColor={{
                   false: theme.secondaryBackgroundColor,
                   true: theme.accentColor,
                 }}
-                accessible={true}
                 accessibilityLabel={i18n.t('remember_me')}
                 accessibilityHint={i18n.t('remember_me_hint')}
               />
@@ -127,7 +136,6 @@ class Login extends React.Component {
           </View>
           <TouchableHighlight
             style={computedStyles.button}
-            accessible={true}
             accessibilityLabel={i18n.t('login')}
             accessibilityHint={i18n.t('login_hint')}
             accessibilityRole="button"
@@ -149,11 +157,16 @@ class Login extends React.Component {
 
 export default withTheme(Login);
 
-const styles = theme =>
-  StyleSheet.create({
+const styles = theme => {
+  let themeObj = {
     outerContainer: {
       backgroundColor: theme.backgroundColor,
-      flex: 1,
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      zIndex: 999999,
     },
     container: {
       flex: 1,
@@ -188,6 +201,7 @@ const styles = theme =>
       fontSize: 16,
       color: theme.primaryTextColor,
       paddingVertical: 10,
+      textAlign: isRTL ? 'right' : 'left',
     },
     button: {
       backgroundColor: theme.accentColor,
@@ -203,4 +217,6 @@ const styles = theme =>
     toggleLabel: {
       marginLeft: 10,
     },
-  });
+  };
+  return StyleSheet.create(themeObj);
+};

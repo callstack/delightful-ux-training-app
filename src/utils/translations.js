@@ -10,6 +10,18 @@ export const en = {
   login_hint: 'Press to login',
 };
 
+export const ar = {
+  header: 'من الجميل أن أراك',
+  email: 'البريد الإلكتروني',
+  email_hint: 'إدخال عنوان البريد الإلكتروني الخاص بحسابك',
+  password: 'كلمه السر',
+  password_hint: 'إدخال كلمة المرور الخاصة بك',
+  remember_me: 'تذكر',
+  remember_me_hint: 'تبديل لتذكر البريد الإلكتروني وكلمة المرور',
+  login: 'تسجيل الدخول',
+  login_hint: 'اضغط لتسجيل الدخول',
+};
+
 export const pl = {
   header: 'Miło Cię znów widzieć!',
   email: 'e-mail',

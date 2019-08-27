@@ -1,6 +1,14 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  Platform,
+  StatusBar,
+  View,
+} from 'react-native';
 
+import Login from './Login';
+import ScreensToggleIcon from '../components/ScreensToggleIcon';
 import SongList from '../components/SongList';
 import Player from '../components/Player';
 import { withTheme } from '../utils/theming';
@@ -11,6 +19,7 @@ class Home extends React.Component {
     currentSong: songs.tracks[0],
     currentSongDuration: 10,
     songs: songs.tracks,
+    showLoginScreen: false,
   };
 
   handleSongPress = currentSong => {
@@ -36,31 +45,42 @@ class Home extends React.Component {
     }));
   };
 
+  toggleLoginScreen = () => {
+    this.setState(prevState => ({
+      showLoginScreen: !prevState.showLoginScreen,
+    }));
+  };
+
   render() {
-    console.log(this.props);
+    const { theme } = this.props;
     return (
       <SafeAreaView
-        style={[
-          styles.container,
-          { backgroundColor: this.props.theme.backgroundColor },
-        ]}
+        style={[styles.container, { backgroundColor: theme.backgroundColor }]}
       >
-        <StatusBar
-          barStyle={
-            this.props.theme.name === 'dark' ? 'light-content' : 'dark-content'
-          }
-        />
-        <Player
-          currentSong={this.state.currentSong}
-          duration={this.state.currentSongDuration}
-        />
-        <SongList
-          onSongPress={this.handleSongPress}
-          onSongRemove={this.handleSongRemove}
-          onSongFavouriteToggle={this.handleSongFavouriteToggle}
-          songs={this.state.songs}
-          currentSong={this.state.currentSong}
-        />
+        <View style={{ flex: 1 }}>
+          <ScreensToggleIcon
+            color={theme.primaryTextColor}
+            toggleLoginScreen={this.toggleLoginScreen}
+          />
+          <StatusBar
+            barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
+          />
+          <Player
+            currentSong={this.state.currentSong}
+            duration={this.state.currentSongDuration}
+          />
+          <SongList
+            onSongPress={this.handleSongPress}
+            onSongRemove={this.handleSongRemove}
+            onSongFavouriteToggle={this.handleSongFavouriteToggle}
+            songs={this.state.songs}
+            currentSong={this.state.currentSong}
+          />
+          <Login
+            styles={{ display: this.state.showLoginScreen ? 'block' : 'none' }}
+            toggleLoginScreen={this.toggleLoginScreen}
+          />
+        </View>
       </SafeAreaView>
     );
   }
