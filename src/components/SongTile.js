@@ -148,14 +148,6 @@ const styles = theme =>
       alignItems: 'center',
       flexDirection: 'row',
       paddingHorizontal: 10,
-      shadowColor: theme.primaryTextColor,
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 0.2,
-      elevation: 1,
     },
     title: {
       flex: 1,
