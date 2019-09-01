@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
@@ -92,7 +92,7 @@ class SongTile extends React.Component {
     const computedStyles = styles(this.props.theme);
 
     return (
-      <TouchableOpacity onPress={this.handlePress}>
+      <TouchableWithoutFeedback onPress={this.handlePress}>
         <View style={computedStyles.container}>
           <PanGestureHandler
             onGestureEvent={this.onGestureEvent}
@@ -129,7 +129,7 @@ class SongTile extends React.Component {
             </Animated.View>
           </PanGestureHandler>
         </View>
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     );
   }
 }

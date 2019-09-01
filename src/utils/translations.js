@@ -8,6 +8,8 @@ export const en = {
   remember_me_hint: 'Toggle to remember e-mail and password',
   login: 'Login',
   login_hint: 'Press to login',
+  dark_mode: 'Dark mode',
+  dark_mode_hint: 'Toggle to enable dark mode',
 };
 
 export const ar = {
@@ -20,6 +22,8 @@ export const ar = {
   remember_me_hint: 'تبديل لتذكر البريد الإلكتروني وكلمة المرور',
   login: 'تسجيل الدخول',
   login_hint: 'اضغط لتسجيل الدخول',
+  dark_mode: 'وضع الظلام',
+  dark_mode_hint: 'تبديل لتمكين وضع الظلام',
 };
 
 export const pl = {
@@ -32,4 +36,6 @@ export const pl = {
   remember_me_hint: 'Przełącz by zapamiętać e-mail i hasło',
   login: 'Zaloguj',
   login_hint: 'Naciśnij by się zalogować',
+  dark_mode: 'Tryb ciemny',
+  dark_mode_hint: 'Przełącz by włączyć tryb ciemny',
 };

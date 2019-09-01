@@ -131,6 +131,25 @@ class Login extends React.Component {
               {i18n.t('remember_me')}
             </Text>
           </View>
+          <View style={computedStyles.row}>
+            <Switch
+              value={this.props.isDarkMode}
+              onValueChange={this.props.onToggleDarkMode}
+              trackColor={{
+                false: theme.secondaryBackgroundColor,
+                true: theme.accentColor,
+              }}
+              accessibilityLabel={i18n.t('dark_mode')}
+              accessibilityHint={i18n.t('dark_mode_hint')}
+            />
+            <Text
+              style={computedStyles.toggleLabel}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            >
+              {i18n.t('dark_mode')}
+            </Text>
+          </View>
         </View>
         <TouchableHighlight
           style={computedStyles.button}
@@ -212,6 +231,7 @@ const styles = theme => {
     },
     toggleLabel: {
       marginLeft: 10,
+      color: theme.primaryTextColor,
     },
   };
   return StyleSheet.create(themeObj);
