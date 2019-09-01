@@ -28,6 +28,7 @@ class CollapsibleHeader extends React.Component {
   render() {
     const { currentSong, theme } = this.props;
     const computedStyles = styles(theme);
+
     return (
       <View style={computedStyles.container}>
         <Animated.View

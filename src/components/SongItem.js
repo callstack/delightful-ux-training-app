@@ -25,19 +25,19 @@ const {
   greaterThan,
 } = Animated;
 
-class SongTile extends React.Component {
+class SongItem extends React.Component {
   constructor(props) {
     super(props);
 
     const dragX = new Value(0);
-    const dragVX = new Value(0);
+    const dragVelocityX = new Value(0);
     this.gestureState = new Value(-1);
 
     this.onGestureEvent = event([
       {
         nativeEvent: {
           translationX: dragX,
-          velocityX: dragVX,
+          velocityX: dragVelocityX,
           state: this.gestureState,
         },
       },
@@ -62,7 +62,7 @@ class SongTile extends React.Component {
               position: this.height,
               callback: this.handleHideEnd,
             }),
-            runSwipeDecay(swipeClock, dragX, dragVX),
+            runSwipeDecay(swipeClock, dragX, dragVelocityX),
           ],
           runSpring(springClock, dragX)
         ),
@@ -134,7 +134,7 @@ class SongTile extends React.Component {
   }
 }
 
-export default withTheme(SongTile);
+export default withTheme(SongItem);
 
 const styles = theme => {
   let themeObj = {

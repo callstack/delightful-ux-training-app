@@ -75,7 +75,7 @@ export function runSwipeDecay(clock, value, velocity) {
   ];
 }
 
-//  -  Returning to the initial position animation
+// SongItem -  Returning to the initial position animation
 export function runSpring(clock, position) {
   const state = {
     finished: new Value(0),

@@ -45,7 +45,14 @@ class Player extends React.PureComponent {
   state = new Value(-1);
   prevDragX = new Value(0);
 
-  _onGestureEvent = event([
+  componentDidUpdate(prevProps) {
+    if (this.props.currentSong !== prevProps.currentSong) {
+      this.playingState.setValue(0);
+      this.progressBarPosition.setValue(0);
+    }
+  }
+
+  handleGestureEvent = event([
     {
       nativeEvent: {
         translationX: this.dragX,
@@ -54,14 +61,7 @@ class Player extends React.PureComponent {
     },
   ]);
 
-  componentDidUpdate(prevProps) {
-    if (this.props.currentSong !== prevProps.currentSong) {
-      this.playingState.setValue(0);
-      this.progressBarPosition.setValue(0);
-    }
-  }
-
-  togglePlay = () => {
+  handlePlayToggle = () => {
     this.playingState.setValue(cond(eq(this.playingState, 0), 1, 0));
   };
 
@@ -139,7 +139,7 @@ class Player extends React.PureComponent {
           </View>
           <View style={computedStyles.controls}>
             <PlayPauseButton
-              onPress={this.togglePlay}
+              onPress={this.handlePlayToggle}
               isPlaying={this.playingState}
             />
           </View>
@@ -147,8 +147,8 @@ class Player extends React.PureComponent {
         <View style={[computedStyles.progressBar]}>
           <PanGestureHandler
             maxPointers={1}
-            onGestureEvent={this._onGestureEvent}
-            onHandlerStateChange={this._onGestureEvent}
+            onGestureEvent={this.handleGestureEvent}
+            onHandlerStateChange={this.handleGestureEvent}
           >
             <Animated.View
               style={[

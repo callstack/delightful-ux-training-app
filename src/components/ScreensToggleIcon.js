@@ -1,18 +1,24 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const ScreensToggleIcon = ({
-  color,
-  toggleLoginScreen,
-  shouldClose = false,
-}) => (
+const ScreensToggleIcon = ({ color, onPress, shouldClose = false }) => (
   <Ionicons
     name={shouldClose ? 'md-close' : 'md-settings'}
     size={26}
     color={color}
-    style={{ position: 'absolute', top: 0, right: 20, zIndex: 999 }}
-    onPress={toggleLoginScreen}
+    style={styles.icon}
+    onPress={onPress}
   />
 );
+
+const styles = StyleSheet.create({
+  icon: {
+    position: 'absolute',
+    top: 0,
+    right: 20,
+    zIndex: 999,
+  },
+});
 
 export default ScreensToggleIcon;
