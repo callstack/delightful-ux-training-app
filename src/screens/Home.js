@@ -77,7 +77,11 @@ class Home extends React.Component {
             currentSong={this.state.currentSong}
           />
           {this.state.showLoginScreen && (
-            <Login toggleLoginScreen={this.toggleLoginScreen} />
+            <Login
+              toggleLoginScreen={this.toggleLoginScreen}
+              onToggleDarkMode={this.props.onDarkThemeToggle}
+              isDarkMode={this.props.isDarkMode}
+            />
           )}
         </View>
       </SafeAreaView>
