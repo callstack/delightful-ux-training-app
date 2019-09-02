@@ -32,7 +32,7 @@ class Home extends React.Component {
     }));
   };
 
-  handleSongFavouriteToggle = id => {
+  handleFavouriteToggle = id => {
     this.setState(({ songs }) => ({
       songs: songs.map(song =>
         song.track.id === id
@@ -45,7 +45,7 @@ class Home extends React.Component {
     }));
   };
 
-  toggleLoginScreen = () => {
+  handleLoginScreenToggle = () => {
     this.setState(prevState => ({
       showLoginScreen: !prevState.showLoginScreen,
     }));
@@ -57,10 +57,10 @@ class Home extends React.Component {
       <SafeAreaView
         style={[styles.container, { backgroundColor: theme.backgroundColor }]}
       >
-        <View style={{ flex: 1 }}>
+        <View style={styles.content}>
           <ScreensToggleIcon
             color={theme.primaryTextColor}
-            toggleLoginScreen={this.toggleLoginScreen}
+            onPress={this.handleLoginScreenToggle}
           />
           <StatusBar
             barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
@@ -72,13 +72,13 @@ class Home extends React.Component {
           <SongList
             onSongPress={this.handleSongPress}
             onSongRemove={this.handleSongRemove}
-            onSongFavouriteToggle={this.handleSongFavouriteToggle}
+            onFavouriteToggle={this.handleFavouriteToggle}
             songs={this.state.songs}
             currentSong={this.state.currentSong}
           />
           {this.state.showLoginScreen && (
             <Login
-              toggleLoginScreen={this.toggleLoginScreen}
+              onLoginScreenToggle={this.handleLoginScreenToggle}
               onToggleDarkMode={this.props.onDarkThemeToggle}
               isDarkMode={this.props.isDarkMode}
             />
@@ -95,5 +95,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
+  },
+  content: {
+    flex: 1,
   },
 });

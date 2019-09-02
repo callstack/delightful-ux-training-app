@@ -38,7 +38,7 @@ class Login extends React.Component {
   state = {
     loginValue: '',
     passwordValue: '',
-    rememberPasswordchecked: false,
+    rememberPasswordChecked: false,
   };
 
   setEmail = loginValue => this.setState({ loginValue });
@@ -47,17 +47,17 @@ class Login extends React.Component {
 
   toggleSwitch = () =>
     this.setState(prevState => ({
-      rememberPasswordchecked: !prevState.rememberPasswordchecked,
+      rememberPasswordChecked: !prevState.rememberPasswordChecked,
     }));
 
   render() {
-    const { theme, toggleLoginScreen } = this.props;
+    const { theme, onLoginScreenToggle } = this.props;
     const computedStyles = styles(theme);
     return (
       <View style={computedStyles.container}>
         <ScreensToggleIcon
           color={theme.primaryTextColor}
-          toggleLoginScreen={toggleLoginScreen}
+          onPress={onLoginScreenToggle}
           shouldClose
         />
         <StatusBar
@@ -114,7 +114,7 @@ class Login extends React.Component {
           </View>
           <View style={computedStyles.row}>
             <Switch
-              value={this.state.rememberPasswordchecked}
+              value={this.state.rememberPasswordChecked}
               onValueChange={this.toggleSwitch}
               trackColor={{
                 false: theme.secondaryBackgroundColor,
@@ -187,7 +187,6 @@ const styles = theme => {
       justifyContent: 'center',
       paddingHorizontal: 10,
       backgroundColor: theme.backgroundColor,
-      // trick for correct zIndex on android
       elevation: 18,
     },
     header: {
