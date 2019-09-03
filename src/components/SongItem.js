@@ -6,17 +6,34 @@ import Animated from 'react-native-reanimated';
 import FavouriteIcon from './FavouriteIcon';
 import SmallSongImage from './SmallSongImage';
 import { ROW_HEIGHT } from '../utils/constants';
-import { runSpring } from '../utils/animationHelpers';
+import {
+  runSpring,
+  runLinearTiming,
+  runSwipeDecay,
+} from '../utils/animationHelpers';
 
-const { event, Value, Clock, cond, eq, stopClock } = Animated;
+const {
+  event,
+  Value,
+  Clock,
+  cond,
+  eq,
+  stopClock,
+  interpolate,
+  Extrapolate,
+  greaterThan,
+} = Animated;
 
 class SongItem extends React.Component {
   constructor(props) {
     super(props);
 
     const dragX = new Value(0);
+    const dragVelocityX = new Value(0);
 
     const springClock = new Clock();
+    const clock = new Clock();
+    const swipeClock = new Clock();
 
     this.gestureState = new Value(State.UNDETERMINED);
 
@@ -24,16 +41,39 @@ class SongItem extends React.Component {
       {
         nativeEvent: {
           translationX: dragX,
+          velocityX: dragVelocityX,
           state: this.gestureState,
         },
       },
     ]);
 
+    this.height = new Value(ROW_HEIGHT);
+
     this.translateX = cond(
       eq(this.gestureState, State.ACTIVE),
-      [stopClock(springClock), dragX],
-      runSpring(springClock, dragX)
+      [stopClock(clock), stopClock(swipeClock), stopClock(springClock), dragX],
+      [
+        cond(
+          greaterThan(dragX, 80),
+          [
+            runLinearTiming({
+              clock,
+              toValue: new Value(0),
+              position: this.height,
+              callback: this.handleHideEnd,
+            }),
+            runSwipeDecay(swipeClock, dragX, dragVelocityX),
+          ],
+          runSpring(springClock, dragX)
+        ),
+      ]
     );
+
+    this.opacity = interpolate(this.height, {
+      inputRange: [0, ROW_HEIGHT],
+      outputRange: [0, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
   }
 
   handleHideEnd = () => {
@@ -63,7 +103,8 @@ class SongItem extends React.Component {
                 styles.song,
                 {
                   transform: [{ translateX: this.translateX }],
-                  height: ROW_HEIGHT,
+                  opacity: this.opacity,
+                  height: this.height,
                 },
               ]}
             >
@@ -103,14 +144,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
   },
   title: {
     flex: 1,
     paddingHorizontal: 10,
   },
   innerContainer: {
+    margin: 10,
     flexDirection: 'row',
     alignItems: 'center',
     overflow: 'hidden',
