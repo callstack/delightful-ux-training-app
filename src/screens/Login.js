@@ -8,11 +8,31 @@ import {
   TouchableHighlight,
   View,
   Switch,
+  I18nManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
 
 import ScreensToggleIcon from '../components/ScreensToggleIcon';
 import { withTheme } from '../utils/theming';
+import { en, pl, ar } from '../utils/translations';
+
+i18n.defaultLocale = 'en';
+i18n.fallbacks = true;
+
+i18n.translations = {
+  en: en,
+  pl: pl,
+  ar: ar,
+};
+
+const currentLocale = Localization.locale;
+i18n.locale = currentLocale;
+
+const isRTL = currentLocale.indexOf('ar') === 0;
+I18nManager.allowRTL = isRTL;
+I18nManager.forceRTL(isRTL);
 
 class Login extends React.Component {
   state = {
@@ -42,7 +62,7 @@ class Login extends React.Component {
           shouldClose
         />
         <StatusBar barStyle={'dark-content'} />
-        <Text style={computedStyles.header}>Nice to see you!</Text>
+        <Text style={computedStyles.header}>{i18n.t('header')}</Text>
         <View style={computedStyles.inputGroup}>
           <View style={[computedStyles.row, computedStyles.inputRow]}>
             <Ionicons
@@ -56,7 +76,7 @@ class Login extends React.Component {
               value={this.state.loginValue}
               autoCapitalize="none"
               keyboardType="email-address"
-              placeholder="e-mail"
+              placeholder={i18n.t('email')}
               placeholderTextColor={theme.primaryTextColor}
             />
           </View>
@@ -68,7 +88,7 @@ class Login extends React.Component {
               value={this.state.passwordValue}
               returnKeyType="go"
               autoCapitalize="none"
-              placeholder="password"
+              placeholder={i18n.t('password')}
               placeholderTextColor={theme.primaryTextColor}
               secureTextEntry
             />
@@ -82,7 +102,9 @@ class Login extends React.Component {
                 true: theme.accentColor,
               }}
             />
-            <Text style={computedStyles.toggleLabel}>Remember me</Text>
+            <Text style={computedStyles.toggleLabel}>
+              {i18n.t('remember_me')}
+            </Text>
           </View>
           <View style={computedStyles.row}>
             <Switch
@@ -93,12 +115,14 @@ class Login extends React.Component {
                 true: theme.accentColor,
               }}
             />
-            <Text style={computedStyles.toggleLabel}>Dark mode</Text>
+            <Text style={computedStyles.toggleLabel}>
+              {i18n.t('dark_mode')}
+            </Text>
           </View>
         </View>
         <TouchableHighlight style={computedStyles.button}>
           <View style={computedStyles.row}>
-            <Text style={computedStyles.buttonText}>Login</Text>
+            <Text style={computedStyles.buttonText}>{i18n.t('login')}</Text>
             <Ionicons
               name="md-arrow-forward"
               size={16}
@@ -155,6 +179,7 @@ const styles = theme => {
       fontSize: 16,
       color: theme.primaryTextColor,
       paddingVertical: 10,
+      textAlign: isRTL ? 'right' : 'left',
     },
     button: {
       backgroundColor: theme.accentColor,
