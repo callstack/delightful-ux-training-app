@@ -1,27 +1,39 @@
 import React from 'react';
 import { Text, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 
 import FavouriteIcon from './FavouriteIcon';
 import SmallSongImage from './SmallSongImage';
 import { ROW_HEIGHT } from '../utils/constants';
+import { runSpring } from '../utils/animationHelpers';
 
-const { event, Value } = Animated;
+const { event, Value, Clock, cond, eq, stopClock } = Animated;
 
 class SongItem extends React.Component {
   constructor(props) {
     super(props);
 
-    this.translateX = new Value(0);
+    const dragX = new Value(0);
+
+    const springClock = new Clock();
+
+    this.gestureState = new Value(State.UNDETERMINED);
 
     this.onGestureEvent = event([
       {
         nativeEvent: {
-          translationX: this.translateX,
+          translationX: dragX,
+          state: this.gestureState,
         },
       },
     ]);
+
+    this.translateX = cond(
+      eq(this.gestureState, State.ACTIVE),
+      [stopClock(springClock), dragX],
+      runSpring(springClock, dragX)
+    );
   }
 
   handleHideEnd = () => {
