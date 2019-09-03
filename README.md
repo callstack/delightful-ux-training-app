@@ -34,7 +34,7 @@ Reanimated documentation: https://github.com/kmagiera/react-native-reanimated
 
 Install Reanimated:
 ```sh
-yarn add react-native-reanimated
+expo install react-native-reanimated
 ```
 
 #### Heart icon animation
@@ -108,23 +108,25 @@ Documentation for RN Gesture Handler: https://kmagiera.github.io/react-native-ge
 
 Install Gesture Handler: 
 ```sh
-yarn add react-native-gesture-handler
+expo install react-native-gesture-handler
 ```
 
 #### Make song item draggable
 
 Work in `SongItem`:
-- Remember to change song container from `View` to `Animated.View` - you can't animate regular View, right?
+- Remember to change song `container` from `View` to `Animated.View` - you can't animate regular View, right?
 - Wrap `Animated.View` using `PanGestureHandler`.
-- Use `onGestureEvent` and `onHandlerStateChange` prop of `PanGestureHandler`. 
 - Use `activeOffsetX` prop to allow only swipe right. 
 - Use `maxPointers` prop to set number of fingers required for the gesture.
-- Similar way to flatlist scroll, exctract `translationX`, `velocityX` and `state` from the `event`.
+- Create class constructor.
+- In the constructor create `onGestureEvent` class field. Similar way to flatlist scroll, assign `Animated.event` to it and extract `translationX` from the `event` in the function.
+- Assign `this.onGestureEvent` to `onGestureEvent` and `onHandlerStateChange` prop of `PanGestureHandler`. 
 - Use `translationX` in `Animated.Value` style.
 
 #### Revert translation when gesture ends
 
 In `SongItem`:
+- Create 
 - Assign `cond` to the `translationX`.
 - Check if the gesture is still active (use `cond`, `eq`, `State.ACTIVE`).
 - If is active, stop clocks and return `dragX`.
