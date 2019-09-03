@@ -1,5 +1,3 @@
-import { createTheming } from '@callstack/react-theme-provider';
-
 export const darkTheme = {
   name: 'dark',
   backgroundColor: '#131313',
@@ -17,7 +15,3 @@ export const lightTheme = {
   secondaryTextColor: '#333',
   accentColor: '#3903fc',
 };
-
-const { ThemeProvider, withTheme } = createTheming(lightTheme);
-
-export { ThemeProvider, withTheme };

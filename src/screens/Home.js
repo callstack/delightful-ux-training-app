@@ -11,7 +11,6 @@ import Login from './Login';
 import ScreensToggleIcon from '../components/ScreensToggleIcon';
 import SongList from '../components/SongList';
 import Player from '../components/Player';
-import { withTheme } from '../utils/theming';
 import songs from '../../assets/topTracks.json';
 
 class Home extends React.Component {
@@ -52,19 +51,14 @@ class Home extends React.Component {
   };
 
   render() {
-    const { theme } = this.props;
     return (
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: theme.backgroundColor }]}
-      >
+      <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <ScreensToggleIcon
-            color={theme.primaryTextColor}
+            color={'#131313'}
             onPress={this.handleLoginScreenToggle}
           />
-          <StatusBar
-            barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
-          />
+          <StatusBar barStyle={'dark-content'} />
           <Player
             currentSong={this.state.currentSong}
             duration={this.state.currentSongDuration}
@@ -89,12 +83,13 @@ class Home extends React.Component {
   }
 }
 
-export default withTheme(Home);
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
+    backgroundColor: '#FFF',
   },
   content: {
     flex: 1,

@@ -1,29 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet } from 'react-native';
 
 import PlayPauseButton from './PlayPauseButton';
 import { PLAYER_HEIGHT } from '../utils/constants';
-import { runLinearTiming } from '../utils/animationHelpers';
-import { withTheme } from '../utils/theming';
-
-const {
-  Clock,
-  Value,
-  stopClock,
-  cond,
-  set,
-  block,
-  eq,
-  event,
-  add,
-  sub,
-  multiply,
-  divide,
-  max,
-  min,
-} = Animated;
 
 class Player extends React.PureComponent {
   static defaultProps = {
@@ -31,202 +10,93 @@ class Player extends React.PureComponent {
     duration: 50,
   };
 
-  playerClock = new Clock();
-  playingState = new Value(0);
-
-  progressBarClock = new Clock();
-  progressBarPosition = new Value(0);
-  progressBarInitialPosition = new Value(0);
-  maxProgressBarPosition = new Value(
-    (Dimensions.get('window').width || 27) - 27
-  ); // paddings + indicator size / 2
-
-  dragX = new Value(0);
-  state = new Value(-1);
-  prevDragX = new Value(0);
-
-  componentDidUpdate(prevProps) {
-    if (this.props.currentSong !== prevProps.currentSong) {
-      this.playingState.setValue(0);
-      this.progressBarPosition.setValue(0);
-    }
-  }
-
-  handleGestureEvent = event([
-    {
-      nativeEvent: {
-        translationX: this.dragX,
-        state: this.state,
-      },
-    },
-  ]);
-
-  handlePlayToggle = () => {
-    this.playingState.setValue(cond(eq(this.playingState, 0), 1, 0));
-  };
+  handlePlayToggle = () => {};
 
   render() {
-    const computedStyles = styles(this.props.theme);
-
     return (
-      <View style={computedStyles.container}>
-        <Animated.Code key={this.props.currentSong}>
-          {() =>
-            block([
-              // progressbar animation
-              cond(
-                eq(this.playingState, 1),
-                runLinearTiming({
-                  clock: this.progressBarClock,
-                  toValue: this.maxProgressBarPosition,
-                  position: this.progressBarPosition,
-                  duration: multiply(
-                    divide(
-                      sub(
-                        this.maxProgressBarPosition,
-                        this.progressBarInitialPosition
-                      ),
-                      this.maxProgressBarPosition
-                    ),
-                    this.props.duration * 1000
-                  ),
-                }),
-                [
-                  stopClock(this.progressBarClock),
-                  set(
-                    this.progressBarInitialPosition,
-                    this.progressBarPosition
-                  ),
-                ]
-              ),
-              // animating progressbar during drag gesture
-              cond(
-                eq(this.state, State.ACTIVE),
-                [
-                  set(
-                    this.progressBarPosition,
-                    min(
-                      this.maxProgressBarPosition,
-                      max(
-                        0,
-                        add(
-                          this.progressBarPosition,
-                          sub(this.dragX, this.prevDragX)
-                        )
-                      )
-                    )
-                  ),
-                  set(this.prevDragX, this.dragX),
-                  set(this.playingState, 0),
-                  set(
-                    this.progressBarInitialPosition,
-                    this.progressBarPosition
-                  ),
-                ],
-                set(this.prevDragX, 0)
-              ),
-            ])
-          }
-        </Animated.Code>
-        <View style={computedStyles.content}>
-          <View style={computedStyles.textContainer}>
-            <Text style={computedStyles.title}>
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>
               {this.props.currentSong.track.name}
             </Text>
-            <Text style={computedStyles.subTitle}>
+            <Text style={styles.subTitle}>
               {this.props.currentSong.track.album.name}
             </Text>
           </View>
-          <View style={computedStyles.controls}>
+          <View style={styles.controls}>
             <PlayPauseButton
               onPress={this.handlePlayToggle}
-              isPlaying={this.playingState}
+              isPlaying={false}
             />
           </View>
         </View>
-        <View style={[computedStyles.progressBar]}>
-          <PanGestureHandler
-            maxPointers={1}
-            onGestureEvent={this.handleGestureEvent}
-            onHandlerStateChange={this.handleGestureEvent}
-          >
-            <Animated.View
-              style={[
-                computedStyles.progressIndicator,
-                {
-                  transform: [{ translateX: this.progressBarPosition }],
-                },
-              ]}
-              hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
-            />
-          </PanGestureHandler>
+        <View style={styles.progressBar}>
+          <View style={styles.progressIndicator} />
         </View>
       </View>
     );
   }
 }
 
-export default withTheme(Player);
+export default Player;
 
-const styles = theme => {
-  let themeObj = {
-    container: {
-      height: PLAYER_HEIGHT,
-      alignItems: 'stretch',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      zIndex: 2,
-      paddingHorizontal: 10,
-      shadowColor: 'black',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.5,
-      shadowRadius: 10,
-      elevation: 16,
-      borderTopLeftRadius: 15,
-      borderTopRightRadius: 15,
-      backgroundColor: theme.secondaryBackgroundColor,
-    },
-    content: {
-      flexDirection: 'row',
-      flex: 1,
-      alignContent: 'center',
-      alignItems: 'stretch',
-    },
-    controls: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    textContainer: {
-      flex: 1,
-      paddingVertical: 10,
-      justifyContent: 'center',
-    },
-    subTitle: {
-      color: theme.secondaryTextColor,
-      fontSize: 14,
-    },
-    title: {
-      color: theme.primaryTextColor,
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-    progressBar: {
-      alignSelf: 'stretch',
-      height: 3,
-      marginBottom: 15,
-      backgroundColor: theme.primaryTextColor,
-    },
-    progressIndicator: {
-      top: -4,
-      height: 10,
-      width: 10,
-      left: 0,
-      position: 'relative',
-      borderRadius: 5,
-      backgroundColor: theme.accentColor,
-    },
-  };
-  return StyleSheet.create(themeObj);
-};
+const styles = StyleSheet.create({
+  container: {
+    height: PLAYER_HEIGHT,
+    alignItems: 'stretch',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
+    paddingHorizontal: 10,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 16,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    backgroundColor: '#f5f9ff',
+  },
+  content: {
+    flexDirection: 'row',
+    flex: 1,
+    alignContent: 'center',
+    alignItems: 'stretch',
+  },
+  controls: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+    paddingVertical: 10,
+    justifyContent: 'center',
+  },
+  subTitle: {
+    color: '#333',
+    fontSize: 14,
+  },
+  title: {
+    color: '#131313',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  progressBar: {
+    alignSelf: 'stretch',
+    height: 3,
+    marginBottom: 15,
+    backgroundColor: '#131313',
+  },
+  progressIndicator: {
+    top: -4,
+    height: 10,
+    width: 10,
+    left: 0,
+    position: 'relative',
+    borderRadius: 5,
+    backgroundColor: '#3903fc',
+  },
+});

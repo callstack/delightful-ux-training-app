@@ -8,31 +8,10 @@ import {
   TouchableHighlight,
   View,
   Switch,
-  I18nManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as Localization from 'expo-localization';
-import i18n from 'i18n-js';
 
 import ScreensToggleIcon from '../components/ScreensToggleIcon';
-import { withTheme } from '../utils/theming';
-import { en, pl, ar } from '../utils/translations';
-
-i18n.defaultLocale = 'en';
-i18n.fallbacks = true;
-
-i18n.translations = {
-  en: en,
-  pl: pl,
-  ar: ar,
-};
-
-const currentLocale = Localization.locale;
-i18n.locale = currentLocale;
-
-const isRTL = currentLocale.indexOf('ar') === 0;
-I18nManager.allowRTL = isRTL;
-I18nManager.forceRTL(isRTL);
 
 class Login extends React.Component {
   state = {
@@ -51,119 +30,69 @@ class Login extends React.Component {
     }));
 
   render() {
-    const { theme, onLoginScreenToggle } = this.props;
-    const computedStyles = styles(theme);
+    const { onLoginScreenToggle } = this.props;
     return (
-      <View style={computedStyles.container}>
+      <View style={styles.container}>
         <ScreensToggleIcon
-          color={theme.primaryTextColor}
+          color={'#131313'}
           onPress={onLoginScreenToggle}
           shouldClose
         />
-        <StatusBar
-          barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
-        />
-        <Text
-          style={computedStyles.header}
-          accessibilityLabel={i18n.t('header')}
-          accessibilityRole="text"
-        >
-          {i18n.t('header')}
-        </Text>
-        <View style={computedStyles.inputGroup}>
-          <View style={[computedStyles.row, computedStyles.inputRow]}>
-            <Ionicons
-              name="md-person"
-              size={26}
-              color={theme.primaryTextColor}
-              accessibilityElementsHidden={true}
-              importantForAccessibility="no"
-            />
+        <StatusBar barStyle={'dark-content'} />
+        <Text style={styles.header}>Nice to see you!</Text>
+        <View style={styles.inputGroup}>
+          <View style={[styles.row, styles.inputRow]}>
+            <Ionicons name="md-person" size={26} color={'#131313'} />
             <TextInput
-              style={computedStyles.input}
+              style={styles.input}
               onChangeText={this.setEmail}
               value={this.state.loginValue}
               autoCapitalize="none"
               keyboardType="email-address"
-              placeholder={i18n.t('email')}
-              placeholderTextColor={theme.secondaryTextColor}
-              accessibilityLabel={i18n.t('email')}
-              accessibilityHint={i18n.t('email_hint')}
+              placeholder="e-mail"
+              placeholderTextColor={'#131313'}
             />
           </View>
-          <View style={[computedStyles.row, computedStyles.inputRow]}>
-            <Ionicons
-              name="md-lock"
-              size={26}
-              color={theme.primaryTextColor}
-              accessibilityElementsHidden={true}
-              importantForAccessibility="no"
-            />
+          <View style={[styles.row, styles.inputRow]}>
+            <Ionicons name="md-lock" size={26} color={'#131313'} />
             <TextInput
-              style={computedStyles.input}
+              style={styles.input}
               onChangeText={this.setPassword}
               value={this.state.passwordValue}
               returnKeyType="go"
               autoCapitalize="none"
-              placeholder={i18n.t('password')}
-              placeholderTextColor={theme.secondaryTextColor}
-              accessibilityLabel={i18n.t('password')}
-              accessibilityHint={i18n.t('password_hint')}
+              placeholder="password"
+              placeholderTextColor={'#131313'}
               secureTextEntry
             />
           </View>
-          <View style={computedStyles.row}>
+          <View style={styles.row}>
             <Switch
               value={this.state.rememberPasswordChecked}
               onValueChange={this.toggleSwitch}
               trackColor={{
-                false: theme.secondaryBackgroundColor,
-                true: theme.accentColor,
+                false: '#f5f9ff',
+                true: '#3903fc',
               }}
-              accessibilityLabel={i18n.t('remember_me')}
-              accessibilityHint={i18n.t('remember_me_hint')}
             />
-            <Text
-              style={computedStyles.toggleLabel}
-              accessibilityElementsHidden={true}
-              importantForAccessibility="no"
-            >
-              {i18n.t('remember_me')}
-            </Text>
+            <Text style={styles.toggleLabel}>Remember me</Text>
           </View>
-          <View style={computedStyles.row}>
+          <View style={styles.row}>
             <Switch
               value={this.props.isDarkMode}
               onValueChange={this.props.onToggleDarkMode}
               trackColor={{
-                false: theme.secondaryBackgroundColor,
-                true: theme.accentColor,
+                false: '#f5f9ff',
+                true: '#3903fc',
               }}
-              accessibilityLabel={i18n.t('dark_mode')}
-              accessibilityHint={i18n.t('dark_mode_hint')}
             />
-            <Text
-              style={computedStyles.toggleLabel}
-              accessibilityElementsHidden={true}
-              importantForAccessibility="no"
-            >
-              {i18n.t('dark_mode')}
-            </Text>
+            <Text style={styles.toggleLabel}>Dark mode</Text>
           </View>
         </View>
-        <TouchableHighlight
-          style={computedStyles.button}
-          accessibilityLabel={i18n.t('login')}
-          accessibilityHint={i18n.t('login_hint')}
-          accessibilityRole="button"
-        >
-          <View style={computedStyles.row}>
-            <Text style={computedStyles.buttonText}>{i18n.t('login')}</Text>
-            <Ionicons
-              name="md-arrow-forward"
-              size={16}
-              color={theme.backgroundColor}
-            />
+        <TouchableHighlight style={styles.button}>
+          <View style={styles.row}>
+            <Text style={styles.buttonText}>Login</Text>
+            <Ionicons name="md-arrow-forward" size={16} color={'#FFF'} />
           </View>
         </TouchableHighlight>
       </View>
@@ -171,67 +100,64 @@ class Login extends React.Component {
   }
 }
 
-export default withTheme(Login);
+export default Login;
 
-const styles = theme => {
-  let themeObj = {
-    container: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      zIndex: 999999,
-      paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingHorizontal: 10,
-      backgroundColor: theme.backgroundColor,
-      elevation: 18,
-    },
-    header: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: theme.primaryTextColor,
-    },
-    inputGroup: {
-      alignItems: 'stretch',
-      width: '100%',
-      marginBottom: 20,
-    },
-    row: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      margin: 10,
-    },
-    inputRow: {
-      borderBottomWidth: 2,
-      borderBottomColor: theme.primaryTextColor,
-      justifyContent: 'space-between',
-    },
-    input: {
-      height: 40,
-      flex: 0.9,
-      fontSize: 16,
-      color: theme.primaryTextColor,
-      paddingVertical: 10,
-      textAlign: isRTL ? 'right' : 'left',
-    },
-    button: {
-      backgroundColor: theme.accentColor,
-      borderRadius: 25,
-      padding: 5,
-    },
-    buttonText: {
-      color: theme.backgroundColor,
-      fontSize: 16,
-      textTransform: 'uppercase',
-      marginRight: 10,
-    },
-    toggleLabel: {
-      marginLeft: 10,
-      color: theme.primaryTextColor,
-    },
-  };
-  return StyleSheet.create(themeObj);
-};
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 999999,
+    paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    backgroundColor: '#FFF',
+    elevation: 18,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#131313',
+  },
+  inputGroup: {
+    alignItems: 'stretch',
+    width: '100%',
+    marginBottom: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+  },
+  inputRow: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#131313',
+    justifyContent: 'space-between',
+  },
+  input: {
+    height: 40,
+    flex: 0.9,
+    fontSize: 16,
+    color: '#131313',
+    paddingVertical: 10,
+    textAlign: 'left',
+  },
+  button: {
+    backgroundColor: '#3903fc',
+    borderRadius: 25,
+    padding: 5,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    textTransform: 'uppercase',
+    marginRight: 10,
+  },
+  toggleLabel: {
+    marginLeft: 10,
+    color: '#131313',
+  },
+});

@@ -1,59 +1,35 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
-import Animated from 'react-native-reanimated';
-
-import { withTheme } from '../utils/theming';
-
-const { interpolate, Extrapolate } = Animated;
+import { StyleSheet, Text, View } from 'react-native';
 
 class HeaderTitle extends React.Component {
-  titleOpacity = interpolate(this.props.scrollY, {
-    inputRange: [50, 100],
-    outputRange: [0, 1],
-    extrapolate: Extrapolate.CLAMP,
-  });
-
   render() {
-    const { currentSong, theme } = this.props;
-    const computedStyles = styles(theme);
+    const { currentSong } = this.props;
 
     return (
-      <Animated.View
-        style={[
-          computedStyles.container,
-          {
-            opacity: this.titleOpacity,
-          },
-        ]}
-      >
-        <Text style={computedStyles.text}>
-          {currentSong.track.artists[0].name}
-        </Text>
-      </Animated.View>
+      <View style={styles.container}>
+        <Text style={styles.text}>{currentSong.track.artists[0].name}</Text>
+      </View>
     );
   }
 }
 
-export default withTheme(HeaderTitle);
+export default HeaderTitle;
 
-const styles = theme => {
-  let themeObj = {
-    container: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      alignItems: 'center',
-      backgroundColor: theme.secondaryBackgroundColor,
-      padding: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.secondaryBackgroundColor,
-      elevation: 5,
-    },
-    text: {
-      color: theme.primaryTextColor,
-      fontSize: 15,
-    },
-  };
-  return StyleSheet.create(themeObj);
-};
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    backgroundColor: '#f5f9ff',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f5f9ff',
+    elevation: 5,
+  },
+  text: {
+    color: '#131313',
+    fontSize: 15,
+  },
+});
