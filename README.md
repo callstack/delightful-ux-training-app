@@ -35,7 +35,7 @@ Install Reanimated:
 expo install react-native-reanimated
 ```
 
-#### Heart icon animation
+#### Heart icon animation (branch `1-favicon`)
 
 Create a function to animate `FavouriteButton` opacity smoothly.
 
@@ -58,7 +58,7 @@ In `FavouriteButton`:
 - Remember to update manually `toValue` when component updates (`ComponentDidUpdate`).
 - Remember to use `Animated.View`!
 
-#### Play/Pause button 
+#### Play/Pause button (branch `2-play-pause`)
 
 In `Player`:
 - In body class create new `playingState` `Animated.Value`.
@@ -74,7 +74,7 @@ In `PlayPauseButton`:
 - Use `concat` node to add 'deg' sufix to the `rotateY`.
 - Use opacity and rotate values in `transform` style of proper elements.
 
-#### Progressbar
+#### Progressbar ★
 
 If you have some time now, try to implement a progress bar! A progress bar should:
 
@@ -90,7 +90,7 @@ You will need:
 - `runLinearTiming` function we created before
 - `Value` and `Clock` - of course
 
-#### Collapsible header
+#### Collapsible header (branch `3-header`)
 
 In `SongList`:
 - First create `AnimatedFlatList` using `Animated.createAnimatedComponent` and put it in a place of regular `FlatList` - it will provide more props for us. 
@@ -124,7 +124,7 @@ Install Gesture Handler:
 expo install react-native-gesture-handler
 ```
 
-#### Make song item draggable
+#### Make song item draggable (branch `4-drag-song-item`)
 
 Work in `SongItem`:
 - Remember to change song `container` from `View` to `Animated.View` - you can't animate regular View, right?
@@ -136,7 +136,7 @@ Work in `SongItem`:
 - Assign `this.onGestureEvent` to `onGestureEvent` and `onHandlerStateChange` prop of `PanGestureHandler`. 
 - Use `translationX` in `Animated.Value` style.
 
-#### Revert translation when gesture ends
+#### Revert translation when gesture ends (branch `5-revert-translation`)
 
 In `SongItem`:
 - Create `const dragX` - Animated Value - and `this.gestureState` Animated Value equal to `State.UNDETERMINED` in the constructor.
@@ -158,7 +158,7 @@ In `utils/animationHelpers`:
   - If `state.finished` (`cond`), `stopClock`.
   - Return `state.position`.
   
-#### Hide the song if the gesture succeeded
+#### Hide the song if the gesture succeeded (branch `6-hide-song`)
 
 In `SongItem`:
 - In the constructor create new `Animated.Value` equal to imported `ROW_HEIGHT`. Let's call it just `this.height`. 
@@ -186,7 +186,7 @@ In `utils/animationHelpers`:
   - Checking if `state.finished`; if **true**, `stopClock`.
   - Returning `state.position`.
   
-#### Remove the song from the state if hidden
+#### Remove the song from the state if hidden (branch `7-remove-song`)
 
 In `SongItem`:
 - You already implemented `runLinearTiming` if the gesture passed the breakpoint; add another key to that function config: `callback` with value `this.handleHideEnd`.
@@ -202,7 +202,7 @@ In `utils/animationHelpers`:
 
 Since now we'll be working on `Login` screen. To make it more comfortable, edit `state.showLoginScreen` in `Home`, so the `Login` screen will be initially visible. 
 
-### Theming 
+### Theming (branch `8-theme-provider`)
 
 Documentation for the theme provider: https://github.com/callstack/react-theme-provider
 
@@ -232,7 +232,7 @@ Check if theme works using toggle!
 i18n-js documentation: https://github.com/fnando/i18n-js
 Localization documentation: https://docs.expo.io/versions/latest/sdk/localization/
 
-#### Multi-language support 
+#### Multi-language support (branch `9-internationalization`) 
 
 Install both libraries: 
 ```sh
@@ -256,7 +256,7 @@ Test it out changing settings of your emulator or hardcoding `i18n.locale`!
 - Set `I18nManager.allowRTL` and `I18nManager.forceRTL`.
 - Test RTL layout and adjust styles if neccessary using `isRTL`.
 
-### Accessibility 
+### Accessibility (branch `10-accessibility`) 
 
 Documentation: https://facebook.github.io/react-native/docs/accessibility
 
