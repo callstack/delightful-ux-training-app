@@ -1,26 +1,37 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Image,
-  View,
-} from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import Animated from 'react-native-reanimated';
+
+import { runLinearTiming } from '../utils/animationHelpers';
 import iconHeart from '../../assets/icon_heart.png';
 
+const { Clock, Value } = Animated;
+
 class FavouriteIcon extends React.Component {
+  clock = new Clock();
+  toValue = new Value(0.2);
+  opacity = runLinearTiming({
+    clock: this.clock,
+    toValue: this.toValue,
+    position: new Value(0.2),
+  });
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.checked !== this.props.checked) {
+      this.toValue.setValue(this.props.checked ? 1 : 0.2);
+    }
+  }
+
   render() {
     return (
       <TouchableWithoutFeedback
         enabled={this.props.tapEnabled}
         onPress={this.props.onToggle}
       >
-        <View
-          style={{
-            opacity: this.props.checked ? 1 : 0.2,
-          }}
-        >
-          <Image source={iconHeart} style={style.icon} />
-        </View>
+        <Animated.Image
+          source={iconHeart}
+          style={[style.icon, { opacity: this.opacity }]}
+        />
       </TouchableWithoutFeedback>
     );
   }
