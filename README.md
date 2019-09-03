@@ -126,7 +126,10 @@ Work in `SongItem`:
 #### Revert translation when gesture ends
 
 In `SongItem`:
-- Create 
+- Create `const dragX` - Animated Value - and `this.gestureState` Animated Value equal to `State.UNDETERMINED` in the constructor.
+- Create `const springClock` - `Animated.Clock` - in the constructor.
+- Extract also `state` from the `event`.
+- Reassign `translationX` from the `event` - save it to our new `dragX` helper.
 - Assign `cond` to the `translationX`.
 - Check if the gesture is still active (use `cond`, `eq`, `State.ACTIVE`).
 - If is active, stop clocks and return `dragX`.
@@ -145,12 +148,19 @@ In `utils/animationHelpers`:
 #### Hide the song if the gesture succeeded
 
 In `SongItem`:
-- In the class body create new `Animated.Value` equal to imported `ROW_HEIGHT`. Let's call it just `this.height`. 
-- In the `cond` already assigned to the `translationX` nest another `cond` - check if gesture passed 80 breakpoint (`greaterThan`).
-- If it didn't, it should revert as before.
+- In the constructor create new `Animated.Value` equal to imported `ROW_HEIGHT`. Let's call it just `this.height`. 
+- In the constructor create helper `const dragVelocityX` - Animated Value.
+- Exctract `velocityX` from the `event`.
+- Create 2 new `clocks` in the constructor: `clock` and `swipeClock`.
+- Stop those 2 `clocks` in the `cond` we have for checking if the gesture is `active`.
+- In the `cond` already assigned to the `translationX` nest another `cond` - check if gesture passed 80 breakpoint (`greaterThan`) (in a place of current `runSpring` call).
+- If it didn't, it should revert as before (call `runSpring` here).
 - If succeeded, call block containing 2 functions:
   - `runLinearTiming` to animate `SongItem` height to 0. Your `position` argument will be `this.height`.
   - `runSwipeDecay` you'll create in a moment. Call it with `swipeClock`, `dragX` and `dragVelocityX` arguments.
+- Apply `this.height` to `song` View style.
+- For nice effect, create `opacity` Animated Value in constuctor and `interpolate` its value basing on `this.height`.
+- Apply `this.opacity` to the styles of `song`.
   
 In `utils/animationHelpers`:
 - Create `runSwipeDecay` function. It should accept `clock`, `value` and `velocity` arguments.
