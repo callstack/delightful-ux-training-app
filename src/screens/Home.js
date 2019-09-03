@@ -18,7 +18,7 @@ class Home extends React.Component {
     currentSong: songs.tracks[0],
     currentSongDuration: 10,
     songs: songs.tracks,
-    showLoginScreen: false,
+    showLoginScreen: true,
   };
 
   handleSongPress = currentSong => {
