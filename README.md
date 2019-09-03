@@ -79,3 +79,44 @@ You will need:
 - math functions - `multiply`, `divide`, `sub`
 - `runLinearTiming` function we created before
 - `Value` and `Clock` - of course
+
+#### Collapsible header
+
+In `SongList`:
+- First set `scrollEventThrottle` prop of the `Flatlist` to 16 - this will provide smooth performance.
+- Use `Flatlist`'s `onScroll` event.
+- Extract `nativeEvent.contentOffset.y` value from the `event` and save it to the `scrollY` class field (`Animated.Value`).
+- Pass `scrollY` to `CollapsibleHeader` and `HeaderTitle` components.
+
+In `CollapsibleHeader`:
+- Interpolate `translateY` ([0, 130] => [0, 130]), `opacity` ([0, 200] => [1, 0]) and `scale` ([0, 130] => [1, 0.6]) values basing on `scrollY` prop.
+- Add `Extrapolate.CLAMP` to the interpolations - you don't want to exceed the range.
+- Change regular `View` to `Animated.View` where necessary.
+- Use interpolated values in styles.
+
+In `HeaderTitle`:
+- Interpolate `titleOpacity` (50, 100) => (0, 1), value basing on `scrollY` prop.
+- Add `Extrapolate.CLAMP` to the interpolation.
+- Change regular `View` to `Animated.View` where necessary.
+- Use interpolated value in styles.
+
+### Gesture handler
+
+Documentation for RN Gesture Handler: https://kmagiera.github.io/react-native-gesture-handler/
+
+Install Gesture Handler: 
+```sh
+yarn add react-native-gesture-handler
+```
+
+#### Remove song from the list
+
+Work in `SongItem`:
+- Remember to change song container from `View` to `Animated.View` - you can't animate regular View, right?
+- Wrap `Animated.View` using `PanGestureHandler`.
+- Use `onGestureEvent` prop of `PanGestureHandler`. 
+- Use `activeOffsetX` prop to allow only swipe right. 
+- Similar way to flatlist scroll, exctract `translationX`, `velocityX` and `state` from the `event`.
+- Use `translationX` in `Animated.Value` style.
+
+// TBD
