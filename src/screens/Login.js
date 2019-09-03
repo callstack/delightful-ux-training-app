@@ -53,7 +53,6 @@ class Login extends React.Component {
   render() {
     const { theme, onLoginScreenToggle } = this.props;
     const computedStyles = styles(theme);
-
     return (
       <View style={computedStyles.container}>
         <ScreensToggleIcon
@@ -61,14 +60,24 @@ class Login extends React.Component {
           onPress={onLoginScreenToggle}
           shouldClose
         />
-        <StatusBar barStyle={'dark-content'} />
-        <Text style={computedStyles.header}>{i18n.t('header')}</Text>
+        <StatusBar
+          barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
+        />
+        <Text
+          style={computedStyles.header}
+          accessibilityLabel={i18n.t('header')}
+          accessibilityRole="text"
+        >
+          {i18n.t('header')}
+        </Text>
         <View style={computedStyles.inputGroup}>
           <View style={[computedStyles.row, computedStyles.inputRow]}>
             <Ionicons
               name="md-person"
               size={26}
               color={theme.primaryTextColor}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
             />
             <TextInput
               style={computedStyles.input}
@@ -77,11 +86,19 @@ class Login extends React.Component {
               autoCapitalize="none"
               keyboardType="email-address"
               placeholder={i18n.t('email')}
-              placeholderTextColor={theme.primaryTextColor}
+              placeholderTextColor={theme.secondaryTextColor}
+              accessibilityLabel={i18n.t('email')}
+              accessibilityHint={i18n.t('email_hint')}
             />
           </View>
           <View style={[computedStyles.row, computedStyles.inputRow]}>
-            <Ionicons name="md-lock" size={26} color={theme.primaryTextColor} />
+            <Ionicons
+              name="md-lock"
+              size={26}
+              color={theme.primaryTextColor}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            />
             <TextInput
               style={computedStyles.input}
               onChangeText={this.setPassword}
@@ -89,7 +106,9 @@ class Login extends React.Component {
               returnKeyType="go"
               autoCapitalize="none"
               placeholder={i18n.t('password')}
-              placeholderTextColor={theme.primaryTextColor}
+              placeholderTextColor={theme.secondaryTextColor}
+              accessibilityLabel={i18n.t('password')}
+              accessibilityHint={i18n.t('password_hint')}
               secureTextEntry
             />
           </View>
@@ -101,8 +120,14 @@ class Login extends React.Component {
                 false: theme.secondaryBackgroundColor,
                 true: theme.accentColor,
               }}
+              accessibilityLabel={i18n.t('remember_me')}
+              accessibilityHint={i18n.t('remember_me_hint')}
             />
-            <Text style={computedStyles.toggleLabel}>
+            <Text
+              style={computedStyles.toggleLabel}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            >
               {i18n.t('remember_me')}
             </Text>
           </View>
@@ -114,13 +139,24 @@ class Login extends React.Component {
                 false: theme.secondaryBackgroundColor,
                 true: theme.accentColor,
               }}
+              accessibilityLabel={i18n.t('dark_mode')}
+              accessibilityHint={i18n.t('dark_mode_hint')}
             />
-            <Text style={computedStyles.toggleLabel}>
+            <Text
+              style={computedStyles.toggleLabel}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            >
               {i18n.t('dark_mode')}
             </Text>
           </View>
         </View>
-        <TouchableHighlight style={computedStyles.button}>
+        <TouchableHighlight
+          style={computedStyles.button}
+          accessibilityLabel={i18n.t('login')}
+          accessibilityHint={i18n.t('login_hint')}
+          accessibilityRole="button"
+        >
           <View style={computedStyles.row}>
             <Text style={computedStyles.buttonText}>{i18n.t('login')}</Text>
             <Ionicons
