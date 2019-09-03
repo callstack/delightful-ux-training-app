@@ -58,9 +58,15 @@ Toggle `FavouriteButton` opacity smoothly.
 
 #### Play/Pause button 
 
+In `Player`:
+- In body class create new `playingState` `Animated.Value`.
+- In `handlePlayToggle` toggle `playingState` value between 1 and 0. Use `setValue`, `cond` and `eq`.
+- Pass `playingState` prop to the `PlayPauseButton`.
+
+In `PlayPauseButton`:
 - Toggle `opacity` of **play** and **pause** buttons.
 - Toggle `rotation` of the **container**.
-- Use `runLinearTiming` again on `pauseOpacity`.
+- Use `runLinearTiming` again on `pauseOpacity`. `toValue` argument should equal `isPlaying` prop.
 - You can use `this.prop.isPlaying` prop directly in `runLinearTiming` - as it evaluates to `1` or `0`.
 - Use `interpolate` to get `playOpacity` and `rotateY` (from 0 to 180).
 - Use `concat` node to add 'deg' sufix to the `rotateY`.
