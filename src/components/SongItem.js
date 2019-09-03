@@ -103,14 +103,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
   },
   title: {
     flex: 1,
     paddingHorizontal: 10,
   },
   innerContainer: {
+    margin: 10,
     flexDirection: 'row',
     alignItems: 'center',
     overflow: 'hidden',
