@@ -111,17 +111,46 @@ Install Gesture Handler:
 yarn add react-native-gesture-handler
 ```
 
-#### Remove song from the list
+#### Make song item draggable
 
 Work in `SongItem`:
 - Remember to change song container from `View` to `Animated.View` - you can't animate regular View, right?
 - Wrap `Animated.View` using `PanGestureHandler`.
-- Use `onGestureEvent` prop of `PanGestureHandler`. 
+- Use `onGestureEvent` and `onHandlerStateChange` prop of `PanGestureHandler`. 
 - Use `activeOffsetX` prop to allow only swipe right. 
+- Use `maxPointers` prop to set number of fingers required for the gesture.
 - Similar way to flatlist scroll, exctract `translationX`, `velocityX` and `state` from the `event`.
 - Use `translationX` in `Animated.Value` style.
 
-// TBD
+#### Revert translation when gesture ends
+
+In `SongItem`:
+- Assign `cond` to the `translationX`.
+- Check if the gesture is still active (use `cond`, `eq`, `State.ACTIVE`).
+- If is active, stop clocks and return `dragX`.
+- If not active, animate back to the start position - run `runSpring` function you'll prepare in a moment. Call it with `springClock` and `dragX` arguments. 
+
+In `utils/animationHelpers`:
+- Create `runSpring` function with `clock` and `position` arguments.
+- In the function body prepare `state` object containing `finished`, `velocity`, `position` and `time` values.
+- Prepare config object using `SpringUtils.makeDefaultConfig()`.
+- Return following `block`: 
+  - If `clockRunning` (`cond`), reset state, restore `state.position` and `startClock`.
+  - Run `spring` with `clock`, `state` and `config` arguments.
+  - If `state.finished` (`cond`), `stopClock`.
+  - Return `state.position`.
+  
+#### Hide the song if the gesture succeeded
+
+In `SongItem`:
+- In the class body create new `Animated.Value` equal to imported `ROW_HEIGHT`. Let's call it just `this.height`. 
+- In the `cond` already assigned to the `translationX` nest another `cond` - check if gesture passed 80 breakpoint (`greaterThan`).
+- If it didn't, it should revert as before.
+- If succeeded, call block containing 2 functions:
+  - `runLinearTiming` to animate `SongItem` height to 0. Your `position` argument will be `this.height`.
+  - `runSwipeDecay` you'll create in a moment. Call it with `swipeClock`, `dragX` and `dragVelocityX` arguments.
+  
+In `utils/animationHelpers`:
 
 ### Theming 
 
