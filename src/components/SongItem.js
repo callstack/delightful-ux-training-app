@@ -60,7 +60,6 @@ class SongItem extends React.Component {
               clock,
               toValue: new Value(0),
               position: this.height,
-              callback: this.handleHideEnd,
             }),
             runSwipeDecay(swipeClock, dragX, dragVelocityX),
           ],
