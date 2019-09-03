@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   innerContainer: {
+    margin: 10,
     flexDirection: 'row',
     alignItems: 'center',
     overflow: 'hidden',
