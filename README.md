@@ -34,7 +34,7 @@ Reanimated documentation: https://github.com/kmagiera/react-native-reanimated
 
 Install Reanimated:
 ```sh
-yarn add react-native-reanimated
+expo install react-native-reanimated
 ```
 
 #### Heart icon animation
@@ -123,23 +123,28 @@ Documentation for RN Gesture Handler: https://kmagiera.github.io/react-native-ge
 
 Install Gesture Handler: 
 ```sh
-yarn add react-native-gesture-handler
+expo install react-native-gesture-handler
 ```
 
 #### Make song item draggable
 
 Work in `SongItem`:
-- Remember to change song container from `View` to `Animated.View` - you can't animate regular View, right?
+- Remember to change song `container` from `View` to `Animated.View` - you can't animate regular View, right?
 - Wrap `Animated.View` using `PanGestureHandler`.
-- Use `onGestureEvent` and `onHandlerStateChange` prop of `PanGestureHandler`. 
 - Use `activeOffsetX` prop to allow only swipe right. 
 - Use `maxPointers` prop to set number of fingers required for the gesture.
-- Similar way to flatlist scroll, exctract `translationX`, `velocityX` and `state` from the `event`.
+- Create class constructor.
+- In the constructor create `onGestureEvent` class field. Similar way to flatlist scroll, assign `Animated.event` to it and extract `translationX` from the `event` in the function.
+- Assign `this.onGestureEvent` to `onGestureEvent` and `onHandlerStateChange` prop of `PanGestureHandler`. 
 - Use `translationX` in `Animated.Value` style.
 
 #### Revert translation when gesture ends
 
 In `SongItem`:
+- Create `const dragX` - Animated Value - and `this.gestureState` Animated Value equal to `State.UNDETERMINED` in the constructor.
+- Create `const springClock` - `Animated.Clock` - in the constructor.
+- Extract also `state` from the `event`.
+- Reassign `translationX` from the `event` - save it to our new `dragX` helper.
 - Assign `cond` to the `translationX`.
 - Check if the gesture is still active (use `cond`, `eq`, `State.ACTIVE`).
 - If is active, stop clocks and return `dragX`.
@@ -158,12 +163,19 @@ In `utils/animationHelpers`:
 #### Hide the song if the gesture succeeded
 
 In `SongItem`:
-- In the class body create new `Animated.Value` equal to imported `ROW_HEIGHT`. Let's call it just `this.height`. 
-- In the `cond` already assigned to the `translationX` nest another `cond` - check if gesture passed 80 breakpoint (`greaterThan`).
-- If it didn't, it should revert as before.
+- In the constructor create new `Animated.Value` equal to imported `ROW_HEIGHT`. Let's call it just `this.height`. 
+- In the constructor create helper `const dragVelocityX` - Animated Value.
+- Exctract `velocityX` from the `event`.
+- Create 2 new `clocks` in the constructor: `clock` and `swipeClock`.
+- Stop those 2 `clocks` in the `cond` we have for checking if the gesture is `active`.
+- In the `cond` already assigned to the `translationX` nest another `cond` - check if gesture passed 80 breakpoint (`greaterThan`) (in a place of current `runSpring` call).
+- If it didn't, it should revert as before (call `runSpring` here).
 - If succeeded, call block containing 2 functions:
   - `runLinearTiming` to animate `SongItem` height to 0. Your `position` argument will be `this.height`.
   - `runSwipeDecay` you'll create in a moment. Call it with `swipeClock`, `dragX` and `dragVelocityX` arguments.
+- Apply `this.height` to `song` View style.
+- For nice effect, create `opacity` Animated Value in constuctor and `interpolate` its value basing on `this.height`.
+- Apply `this.opacity` to the styles of `song`.
   
 In `utils/animationHelpers`:
 - Create `runSwipeDecay` function. It should accept `clock`, `value` and `velocity` arguments.
