@@ -151,6 +151,26 @@ In `SongItem`:
   - `runSwipeDecay` you'll create in a moment. Call it with `swipeClock`, `dragX` and `dragVelocityX` arguments.
   
 In `utils/animationHelpers`:
+- Create `runSwipeDecay` function. It should accept `clock`, `value` and `velocity` arguments.
+- In the function body create :
+  - `state` object containing `finished`, `velocity`, `position` and `time` values
+  - `config` object containing `deceleration` value equal to 0.99
+- Return `block` containing:
+  - Checking if `clockRunning`; if **false** run `block`, in which reset `state` and `config` and run `startClock`.
+  - Calling `decay` with `clock`, `state` and `config` arguments.
+  - Checking if `state.finished`; if **true**, `stopClock`.
+  - Returning `state.position`.
+  
+#### Remove the song from the state if hidden
+
+In `SongItem`:
+- You already implemented `runLinearTiming` if the gesture passed the breakpoint; add another key to that function config: `callback` with value `this.handleHideEnd`.
+
+In `utils/animationHelpers`:
+- Add another key to the config object - function argument - `callback`.
+- Set default value to `() => {}`, so it won't break the function if called without `callback`.
+- To the last `cond` in the `block` you return add callback call. Insert it to the same `block` as `stopClock`.
+- Call callback using `call` node with arguments `[state.finished]` (must be an array, when will change will trigger the call) and `callback`.
 
 ### Theming 
 
