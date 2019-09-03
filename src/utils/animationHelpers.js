@@ -11,6 +11,7 @@ const {
   SpringUtils,
   spring,
   decay,
+  call,
 } = Animated;
 
 export function runLinearTiming({
@@ -18,6 +19,7 @@ export function runLinearTiming({
   toValue,
   position = new Value(0),
   duration = 200,
+  callback = () => {},
 }) {
   const state = {
     finished: new Value(0),
@@ -41,7 +43,7 @@ export function runLinearTiming({
       startClock(clock),
     ]),
     timing(clock, state, config),
-    cond(state.finished, [stopClock(clock)]),
+    cond(state.finished, [stopClock(clock), call([state.finished], callback)]),
     state.position,
   ]);
 }
