@@ -224,7 +224,6 @@ In `Login`:
 - Wrap exported component with the HOC.
 - Edit `styles` to method - it should consume `theme` prop and return computed style using theme values.
 - Change hardcoded color values to these from `theme` (e.g. `theme.primaryTextColor`).
-- Change `StatusBar barStyle` basing on `theme.name`.
 
 Check if theme works using toggle!
 
