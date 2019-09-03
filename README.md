@@ -85,9 +85,12 @@ You will need:
 #### Collapsible header
 
 In `SongList`:
-- First set `scrollEventThrottle` prop of the `Flatlist` to 16 - this will provide smooth performance.
-- Use `Flatlist`'s `onScroll` event.
-- Extract `nativeEvent.contentOffset.y` value from the `event` and save it to the `scrollY` class field (`Animated.Value`).
+- First create `AnimatedFlatList` using `Animated.createAnimatedComponent` and put it in a place of regular `FlatList` - it will provide more props for us. 
+- Uncomment `HeaderTitle`.
+- Create `scrollY` value before the `return` (`Animated.Value`)
+- Set `scrollEventThrottle` prop of the `AnimatedFlatList` to 16 - this will provide smooth performance.
+- Use `AnimatedFlatList`'s `onScroll` event.
+- Extract `nativeEvent.contentOffset.y` value from the `event` and save it to the `scrollY`.
 - Pass `scrollY` to `CollapsibleHeader` and `HeaderTitle` components.
 
 In `CollapsibleHeader`:
@@ -95,9 +98,11 @@ In `CollapsibleHeader`:
 - Add `Extrapolate.CLAMP` to the interpolations - you don't want to exceed the range.
 - Change regular `View` to `Animated.View` where necessary.
 - Use interpolated values in styles.
+- In `imageContainer` styles apply translateY equal to `this.translateY` * 0.3 (use `multiply`).
+- `shadowContainer` should have height equal to `this.translateY`.
 
 In `HeaderTitle`:
-- Interpolate `titleOpacity` (50, 100) => (0, 1), value basing on `scrollY` prop.
+- Interpolate `titleOpacity` class field ([50, 100] => [0, 1]) basing on `scrollY` prop.
 - Add `Extrapolate.CLAMP` to the interpolation.
 - Change regular `View` to `Animated.View` where necessary.
 - Use interpolated value in styles.
