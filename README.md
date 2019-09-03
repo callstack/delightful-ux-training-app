@@ -25,8 +25,6 @@ yarn start
   - Android/iOS simulator - press "Run on iOS simulator"/"Run on Android device/emulator" in Expo web tools
 
 ## Exercises
-### Toggle active screen
-Since now we'll be working on `Login` screen. To make it more handy, edit `state.showLoginScreen` in `Home`, so the `Login` screen will be initially visible. 
 
 ### Animations
 
@@ -199,6 +197,11 @@ In `utils/animationHelpers`:
 - To the last `cond` in the `block` you return add callback call. Insert it to the same `block` as `stopClock`.
 - Call callback using `call` node with arguments `[state.finished]` (must be an array; when any of the array values updates, the call will be triggered) and `callback`.
 
+
+### Toggle active screen
+
+Since now we'll be working on `Login` screen. To make it more comfortable, edit `state.showLoginScreen` in `Home`, so the `Login` screen will be initially visible. 
+
 ### Theming 
 
 Documentation for the theme provider: https://github.com/callstack/react-theme-provider
@@ -221,6 +224,7 @@ In `Login`:
 - Wrap exported component with the HOC.
 - Edit `styles` to method - it should consume `theme` prop and return computed style using theme values.
 - Change hardcoded color values to these from `theme` (e.g. `theme.primaryTextColor`).
+- Change `StatusBar barStyle` basing on `theme.name`.
 
 Check if theme works using toggle!
 
