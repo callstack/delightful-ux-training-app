@@ -36,6 +36,7 @@ yarn add react-native-reanimated
 ```
 
 #### Heart icon animation
+
 Toggle `FavouriteButton` opacity smoothly.
 - Use `Animated.Value`, let's call it `toValue`.
 - Use `Clock`, `clock`.
@@ -54,6 +55,7 @@ Toggle `FavouriteButton` opacity smoothly.
 - Remember to use `Animated.View`!
 
 #### Play/Pause button 
+
 - Toggle `opacity` of **play** and **pause** buttons.
 - Toggle `rotation` of the **container**.
 - Use `runLinearTiming` again on `pauseOpacity`.
@@ -62,4 +64,18 @@ Toggle `FavouriteButton` opacity smoothly.
 - Use `concat` node to add 'deg' sufix to the `rotateY`.
 - Use opacity and rotate values in `transform` style of proper elements.
 
+#### Progressbar
 
+If you have some time now, try to implement a progress bar! A progress bar should:
+
+- animate or stop when play or pause is pressed - translateX property of progress bar indicator
+- animate equally long to current song duration
+- resume animation from the position where stopped
+- reset when song changes
+
+You will need:
+
+- `block`, `eq`, `set`, `cond`
+- math functions - `multiply`, `divide`, `sub`
+- `runLinearTiming` function we created before
+- `Value` and `Clock` - of course
