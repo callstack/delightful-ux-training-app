@@ -147,3 +147,32 @@ In `Login`:
 - Change hardcoded color values to these from `theme` (e.g. `theme.primaryTextColor`).
 
 Check if theme works using toggle!
+
+### Internationalization
+
+i18n-js documentation: https://github.com/fnando/i18n-js
+Localization documentation: https://docs.expo.io/versions/latest/sdk/localization/
+
+#### Multi-language support 
+
+Install both libraries: 
+```sh
+yarn add i18n-js
+expo install expo-localization
+```
+
+- Import `i18n-js`, `expo-localization` and translation objects (from `utils/translations`).
+- Assign `Localization.locale` to `i18n.locale`.
+- Assign translations to locales - create object and pass it to `i18n.translations`.
+- Allow fallbacks using `i18n.fallbacks`.
+- Set default locale using `i18n.defaultLocale`. 
+- Insert dynamic strings using `i18n.t()` method. 
+
+Test it out changing settings of your emulator or hardcoding `i18n.locale`!
+
+#### RTL support 
+
+- Import `I18nManager`.
+- Create condition under which the layout should be RTL (`isRTL` variable you can use later).
+- Set `I18nManager.allowRTL` and `I18nManager.forceRTL`.
+- Test RTL layout and adjust styles if neccessary using `isRTL`.
