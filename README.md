@@ -176,3 +176,35 @@ Test it out changing settings of your emulator or hardcoding `i18n.locale`!
 - Create condition under which the layout should be RTL (`isRTL` variable you can use later).
 - Set `I18nManager.allowRTL` and `I18nManager.forceRTL`.
 - Test RTL layout and adjust styles if neccessary using `isRTL`.
+
+### Accessibility 
+
+Documentation: https://facebook.github.io/react-native/docs/accessibility
+
+First, prepare your simulator / device (warning - for now you can't test in on iOS simulator).
+
+#### Android preparation
+For the emulator:
+- Download apk from http://tiny.cc/androidreader 
+- Drop the apk to the emulator
+
+On emulator / device go to:
+- Settings
+- Accessibility
+- TalkBack
+- Use service
+
+#### iOS preparation
+On device go to: 
+- Settings
+- General
+- Accessibility
+- Vision
+- VoiceOver
+
+#### Implementation
+- Apply `accessibilityLabel`, `accessibilityHint` where apropriate. 
+- You can also use `i18n.t()` to make it internationalized!
+- Hide labels next to `Toggle` components using `accessibilityElementsHidden` and `importantForAccessibility` - to serve both platforms.
+
+If you have some spare time, try to create one `accessible` element in a place of few visual ones!
