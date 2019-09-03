@@ -126,7 +126,10 @@ Work in `SongItem`:
 #### Revert translation when gesture ends
 
 In `SongItem`:
-- Create 
+- Create `const dragX` - Animated Value - and `this.gestureState` Animated Value equal to `State.UNDETERMINED` in the constructor.
+- Create `const springClock` - `Animated.Clock` - in the constructor.
+- Extract also `state` from the `event`.
+- Reassign `translationX` from the `event` - save it to our new `dragX` helper.
 - Assign `cond` to the `translationX`.
 - Check if the gesture is still active (use `cond`, `eq`, `State.ACTIVE`).
 - If is active, stop clocks and return `dragX`.
