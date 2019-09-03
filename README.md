@@ -53,4 +53,13 @@ Toggle `FavouriteButton` opacity smoothly.
 - Remember to update manually `toValue` when component updates.
 - Remember to use `Animated.View`!
 
+#### Play/Pause button 
+- Toggle `opacity` of **play** and **pause** buttons.
+- Toggle `rotation` of the **container**.
+- Use `runLinearTiming` again on `pauseOpacity`.
+- You can use `this.prop.isPlaying` prop directly in `runLinearTiming` - as it evaluates to `1` or `0`.
+- Use `interpolate` to get `playOpacity` and `rotateY` (from 0 to 180).
+- Use `concat` node to add 'deg' sufix to the `rotateY`.
+- Use opacity and rotate values in `transform` style of proper elements.
+
 
