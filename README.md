@@ -170,7 +170,7 @@ In `utils/animationHelpers`:
 - Add another key to the config object - function argument - `callback`.
 - Set default value to `() => {}`, so it won't break the function if called without `callback`.
 - To the last `cond` in the `block` you return add callback call. Insert it to the same `block` as `stopClock`.
-- Call callback using `call` node with arguments `[state.finished]` (must be an array, when will change will trigger the call) and `callback`.
+- Call callback using `call` node with arguments `[state.finished]` (must be an array; when any of the array values updates, the call will be triggered) and `callback`.
 
 ### Theming 
 
