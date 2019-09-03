@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 import PlayPauseButton from './PlayPauseButton';
 import { PLAYER_HEIGHT } from '../utils/constants';
+
+const { Value, cond, eq } = Animated;
 
 class Player extends React.PureComponent {
   static defaultProps = {
@@ -10,7 +13,11 @@ class Player extends React.PureComponent {
     duration: 50,
   };
 
-  handlePlayToggle = () => {};
+  playingState = new Value(0);
+
+  handlePlayToggle = () => {
+    this.playingState.setValue(cond(eq(this.playingState, 0), 1, 0));
+  };
 
   render() {
     return (
@@ -27,7 +34,7 @@ class Player extends React.PureComponent {
           <View style={styles.controls}>
             <PlayPauseButton
               onPress={this.handlePlayToggle}
-              isPlaying={false}
+              isPlaying={this.playingState}
             />
           </View>
         </View>
