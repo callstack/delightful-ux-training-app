@@ -25,6 +25,8 @@ yarn start
   - Android/iOS simulator - press "Run on iOS simulator"/"Run on Android device/emulator" in Expo web tools
 
 ## Exercises
+### Toggle active screen
+Since now we'll be working on `Login` screen. To make it more handy, edit `state.showLoginScreen` in `Home`, so the `Login` screen will be initially visible. 
 
 ### Animations
 
@@ -120,3 +122,28 @@ Work in `SongItem`:
 - Use `translationX` in `Animated.Value` style.
 
 // TBD
+
+### Theming 
+
+Documentation for the theme provider: https://github.com/callstack/react-theme-provider
+
+- Install theme provider: 
+```sh
+yarn add @callstack/react-theme-provider
+```
+
+In `utils/theming`:
+- Create `ThemeProvider` and `withTheme` using `createTheming` method. 
+
+In `App`:
+- Import `ThemeProvider` and 2 themes.
+- Wrap main entry point using `ThemeProvider`. 
+- Pass `theme` prop to the `ThemeProvider` - this will help us to toggle theme in the app.
+
+In `Login`: 
+- Import `withTheme` HOC.
+- Wrap exported component with the HOC.
+- Edit `styles` to method - it should consume `theme` prop and return computed style using theme values.
+- Change hardcoded color values to these from `theme` (e.g. `theme.primaryTextColor`).
+
+Check if theme works using toggle!
