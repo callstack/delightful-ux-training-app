@@ -1,5 +1,8 @@
 # Delightful UX with React Native
 
+Presentation:
+https://docs.google.com/presentation/d/1H3Se6jM-dOuYQQSCMGzfU3OzvHU8hBHowM-ELp7ZzKI/edit?usp=sharing
+
 ## Running application
 - clone repo
 
